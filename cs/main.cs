@@ -2,7 +2,7 @@ using System;
 
 class Yams {
 
-  struct joueur
+  struct createPlayer
   {
     int id;               // id du joueur, 1 ou 2 etant donnée que le nombre max de jouer est 2
     string pseudo;        // pseudo du joueur
@@ -14,5 +14,6 @@ class Yams {
 
   static void Main() {
   
+    
   }
 }
