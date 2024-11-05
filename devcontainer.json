@@ -1,0 +1,23 @@
+{
+  "name": "C# Project Environment",
+  "image": "mcr.microsoft.com/devcontainers/dotnet:7.0", // Image officielle pour .NET 7
+  "features": {
+    "ghcr.io/devcontainers/features/node:1": {} // Inclut Node.js pour gérer JavaScript
+  },
+  "extensions": [
+    "ms-dotnettools.csharp",              // Extension pour le support C#
+    "ms-vscode.vscode-typescript-next",   // Extension pour TypeScript/JavaScript
+    "ms-vscode.js-debug",                 // Debugger pour JS
+    "dbaeumer.vscode-eslint",             // Linter pour JS
+    "esbenp.prettier-vscode",             // Formatteur de code
+    "ritwickdey.LiveServer",              // Extension pour live reload en HTML/CSS/JS
+    "editorconfig.editorconfig"           // Pour la gestion du formatage
+  ],
+  "postCreateCommand": "dotnet restore",  // Installe les dépendances .NET automatiquement
+  "forwardPorts": [5000, 5001],           // Ports pour une application ASP.NET
+  "settings": {
+    "terminal.integrated.defaultProfile.linux": "bash",
+    "files.autoSave": "onFocusChange"     // Enregistre automatiquement les modifications
+  }
+}
+
