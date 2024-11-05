@@ -14,16 +14,25 @@
         <fieldset>
           <legend>Quelle partie voulez-vous consulter ?</legend>
           
-          <label for="id_partie">ID partie</label>
-          <input id="id_partie" name="id_partie" type="text">
-          <br/>
-          
-          <label for="partie">Consulté le fichier Json</label>
-          <input type="radio" id="tour" name="partie" value="tour">
-          <label for="tour">Afficher un tour</label>
-          <input type="radio" id="tout" name="partie" value="tout">
-          <label for="tout">Afficher toute la partie</label>
-          <br/>
+          <div class="selection">
+            <div class="id">
+                <label for="id_partie">ID partie</label>
+                <input id="id_partie" name="id_partie" type="text">
+                <br/>
+            </div>
+            
+            <div class="consultation">
+                <label for="partie">Consulter le fichier Json</label>
+                <input type="radio" id="tour" name="partie" value="tour">
+                <label for="tour">Afficher un tour</label>
+                <input type="radio" id="tout" name="partie" value="tout">
+                <label for="tout">Afficher toute la partie</label>
+                <br/>
+            </div>
+            <div id="bouton">
+                <input type="submit" value="Valider">
+            </div>
+        </div>
           
         </fieldset>
       </form>
@@ -34,7 +43,7 @@
     </main>
 
     <footer>
-      <p>FOUILLEUL Elora, MUHARREMOGLU Açelya, MEGNIN-PREISS Ivanoë TP8</p>
+      FOUILLEUL Elora, MUHARREMOGLU Açelya, MEGNIN-PREISS Ivanoë TP8
     </footer>
 
 
