@@ -1,7 +1,7 @@
 struct joueur {
     string pseudo 
     int id 
-    int dés [,]
+    int des [,]
     int scores_tour [,]
     int scorefinal
     int[,] challenges // sert à identifier les challenges encore dispo
