@@ -10,16 +10,21 @@
   <body>
     <header>
       <h1>Le glossaire des parties</h1>
+      <form>
+        <fieldset>
+          <legend>Quelle partie voulez-vous consulter ?</legend>
+          
+          <label for="id_partie">ID partie</label>
+          <input id="id_partie" name="id_partie" type="text">
+          <br>
+          
+        </fieldset>
+      </form>
     </header>
 
     <main>
       <form>
         <fieldset>
-          <legend>Quelle partie voulez-vous consulter ?</legend>
-
-          <label for="id_partie">ID partie</label>
-          <input id="id_partie" name="id_partie" type="text">
-          <br>
           
           <label for="partie">Consulté le fichier Json</label>
           <input type="radio" id="tour" name="partie" value="tour">
