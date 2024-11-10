@@ -7,12 +7,22 @@ class Yams {
     int id;               // id du joueur, 1 ou 2 etant donnée que le nombre max de jouer est 2
     string pseudo;        // pseudo du joueur
     int[,] dices;         // on va stocker tous les des finaux de chaque rounds
-    int[,] challenges;     // les challenges encore utilisable par le joueur
+    int[,] challenges;     // les challenges encore utilisable par le joueur, premiere ligne pour les mineurs, seconde pour les majeurs
     int[,] scoreRounds;   // les scores de chaque score
     int scoreTotal;       // le score final
   }
 
-  static challenges 
+  /*static struct createChallenge {*/
+  /*  string Challenge;*/
+  /*  string Objectif;*/
+  /*  string NombreDePoints;*/
+  /*}*/
+
+  // declaration des differents challenges, ligne une [0,] pour les challenges mineurs, seconde [1,] pour les majeurs
+  static string[,] challenges = {
+    {"Nombre de 1","Nombre de 2","Nombre de 3","Nombre de 4","Nombre de 5","Nombre de 6"},
+    {"Brelan","Carré","Full","Petite suite","Grande suite","Yam's","Chance"}
+  }
 
   static void Main() {
   
@@ -34,6 +44,8 @@ class Yams {
     }
   }
 
-  static void tour (ref createPlayer currentPlayer)
+  static void tour (ref createPlayer currentPlayer) {
+
+  }
 }
 
