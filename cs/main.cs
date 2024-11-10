@@ -2,7 +2,7 @@ using System;
 
 class Yams {
 
-  struct createPlayer
+  public struct createPlayer
   {
     int id;               // id du joueur, 1 ou 2 etant donnée que le nombre max de jouer est 2
     string pseudo;        // pseudo du joueur
@@ -14,6 +14,18 @@ class Yams {
 
   static void Main() {
   
+    createPlayer player1; // creation du premier joueur
+    player1.id=1;         // initialisation de son id a 1
+
+    createPlayer player2; // creation du premier joueur
+    player2.id=2;         // initialisation de son id a 1
+
+    Console.Write("Entrez le pseudo du premier joueur : ");
+    player1.pseudo = string.Parse (Console.Read ());
+    
+    Console.Write("Entrez le pseudo du second joueur : ");
+    player2.pseudo = string.Parse (Console.Read ());
     
   }
 }
+
