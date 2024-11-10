@@ -4,19 +4,19 @@ struct joueur {
     int dés [,]
     int scores_tour [,]
     int scorefinal
-    int[] challenges // sert à identifier les challenges encore dispo
+    int[,] challenges // sert à identifier les challenges encore dispo
 }
 
 
 Saisie noms_joueurs
 
 
-pour i allant de 0 à 13 (non inclus) {
-    tour ( ref joueur1, ref tableaux, ref etc)
-    tour (joueur2, tableaux)
+pour i allant de 1 à 13 (inclus) {
+    tour (ref joueur1)
+    tour (ref joueur2)
 }
 
-void boucle (ref joueur, ref tableaux, ref etc) {
+void boucle (ref joueurActuel) {
     //Lancer 1
     pour i allant de 0 à 4{
         random 5 des[0,i]
