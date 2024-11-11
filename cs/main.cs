@@ -2,14 +2,23 @@ using System;
 
 class Yams {
 
-  static struct CreatePlayer
+  public struct CreatePlayer
   {
-    int id;               // id du joueur, 1 ou 2 etant donnée que le nombre max de jouer est 2
-    string pseudo;        // pseudo du joueur
-    int[,] dices;         // on va stocker tous les des finaux de chaque rounds
-    int[] challenges;     // les challenges encore utilisable par le joueur
-    int[,] scoreRounds;   // les scores de chaque score
-    int scoreTotal;       // le score final
+    public int id;               // id du joueur, 1 ou 2 etant donnée que le nombre max de jouer est 2
+    public string pseudo;        // pseudo du joueur
+    public int[,] dices;         // on va stocker tous les des finaux de chaque rounds
+    public int[] challenges;     // les challenges encore utilisable par le joueur
+    public int[] scoreRounds;   // les scores de chaque round
+    public int scoreTotal;       // le score final
+
+    public CreatePlayer(int id) {
+      this.id = id;
+      this.pseudo = "Unknown";
+      this.dices = new int [13,5];
+      this.challenges = new int [13];
+      this.scoreRounds = new int [13];
+      this.scoreTotal = 0;
+    }
   }
 
   public struct CreateChallenge {     // structure de création des challenges
@@ -17,10 +26,10 @@ class Yams {
     public string Objectif;
     public string NombreDePoints;
 
-    public CreatePlayer(string Challenge, string Objectif, string NombreDePoints) {
-      Challenge = Challenge;
-      Objectif = Objectif;
-      NombreDePoints = NombreDePoints;
+    public CreateChallenge(string challenge, string objectif, string nombreDePoints) {
+      Challenge = challenge;
+      Objectif = objectif;
+      NombreDePoints = nombreDePoints;
     }
   }
 
@@ -38,36 +47,34 @@ class Yams {
   public static CreateChallenge yams = new CreateChallenge("yams","Obtenir 5 dés de même valeur","50 points");
   public static CreateChallenge chance = new CreateChallenge("Chance","Obtenir le maximum de points","Somme des dés obtenus");
 
-  public static Challenges[] = new CreateChallenge[12] {nombreDe1,nombreDe2,nombreDe3,nombreDe4,nombreDe5,nombreDe6,brelan,carre,full,petiteSuite,grandeSuite,yams,chance};
+  // on met les challenges dans un tableau challenges, les [0-5] sont pour les challenges mineurs, les [6-12] pour les majeurs.
+  public static CreateChallenge[] challenges = new CreateChallenge[13] {nombreDe1,nombreDe2,nombreDe3,nombreDe4,nombreDe5,nombreDe6,brelan,carre,full,petiteSuite,grandeSuite,yams,chance};
 
-  // declaration des differents challenges, [0-5] pour les challenges mineurs, [6-12] pour les majeurs
-  static string[] challenges = {
-    "Nombre de 1","Nombre de 2","Nombre de 3","Nombre de 4","Nombre de 5","Nombre de 6",
-    "Brelan","Carré","Full","Petite suite","Grande suite","Yam's","Chance" 
-  }
+  /*static string[] challenges = {*/
+  /*  "Nombre de 1","Nombre de 2","Nombre de 3","Nombre de 4","Nombre de 5","Nombre de 6",*/
+  /*  "Brelan","Carré","Full","Petite suite","Grande suite","Yam's","Chance" */
+  /*}*/
 
   static void Main() {
   
-    CreatePlayer player1; // creation du premier joueur
-    player1.id=1;         // initialisation de son id a 1
-
-    CreatePlayer player2; // creation du premier joueur
-    player2.id=2;         // initialisation de son id a 1
+    CreatePlayer player1 = new CreatePlayer(1); // creation du premier joueur dont l'id vaut 1
+    CreatePlayer player2 = new CreatePlayer(2); // creation du premier joueur dont l'id vaut 2
 
     Console.Write("Entrez le pseudo du premier joueur : ");
-    player1.pseudo = string.Parse(Console.Read ());
+    player1.pseudo = Console.ReadLine();
     
     Console.Write("Entrez le pseudo du second joueur : ");
-    player2.pseudo = string.Parse(Console.Read ());
+    player2.pseudo = Console.ReadLine();
     
     // tours de jeu
-    for ( int i = 1 ; i <= 13 ) {
-      tour(player1)
+    for ( int i = 1 ; i <= 13 ; i++ ) {
+      tour(i, ref player1);
+      tour(i, ref player2);
     }
   }
 
-  static void tour (ref createPlayer currentPlayer) {
-
+  static void tour (int n, ref CreatePlayer currentPlayer) {
+    Console.WriteLine($"Tour {n} : {currentPlayer.pseudo}");
   }
 }
 
