@@ -1,7 +1,8 @@
 public static bool verifChallenges(struc Joueur, string choix) {
 
     bool ok = false;
-    int somme;
+    int somme = 0 ;
+
 
     // challenge nombre de 1
     if (choix == "nombre de 1") {
@@ -75,5 +76,110 @@ public static bool verifChallenges(struc Joueur, string choix) {
         }
     }
 
+    // challenge brelan
+    if (choix == "brelan") {
+        for (int i=1 ; i<=6 ; i++) {   // pour chaque valeur possible du dé
+            int compteur = 0;
+            for (int j = 0; j < 5; j++) {       // Compter le nombre de fois la valeur apparait
+                if (Joueur.des[j] == i) {
+                    compteur++;
+                }
+            }
+            if (compteur >= 3) {
+                ok = true;
+            }
+        }
+    }
+
+    // challenge carré
+    if (choix == "carré") {
+        for (int i = 1; i <= 6; i++) {
+            int compteur = 0;
+            for (int j = 0; j < 5; j++) {
+                if (Joueur.des[j] == i) {
+                 compteur++;
+                }
+            }
+            if (compteur >= 4) {
+                ok = true;
+            }
+        }
+    }
+
+    // challenge full
+    if (choix == "full") {
+        bool trois = false;  // 3 dés de mm valeurs
+        bool deux = false;   // 2 dés de mm valeurs
+
+        for (int i = 1; i <= 6; i++) {
+            int compteur = 0;
+            for (int j = 0; j < 5; j++) {
+                if (Joueur.des[j] == i) {
+                    compteur++;
+                }
+            }
+            if (compteur == 3) trois = true;
+            if (compteur == 2) deux = true;
+        }
+        if (trois && deux) {   
+            ok = true;
+        }
+    }
+
+    // challenge petite suite
+    if (choix == "petite suite") {
+        bool un = false, deux = false, trois = false, quatre = false, cinq = false, six = false;
     
+        for (int i = 0; i < 5; i++) {
+            if (Joueur.des[i] == 1) un = true;
+            if (Joueur.des[i] == 2) deux = true;
+            if (Joueur.des[i] == 3) trois = true;
+            if (Joueur.des[i] == 4) quatre = true;
+            if (Joueur.des[i] == 5) cinq = true;
+            if (Joueur.des[i] == 6) six = true;
+        }
+
+        if ((un && deux && trois && quatre) || (deux && trois && quatre && cinq) || (trois && quatre && cinq && six)) {
+            ok = true;
+        }
+    }
+
+    // challenge grande suite
+    if (choix == "grande suite") {
+        bool un = false, deux = false, trois = false, quatre = false, cinq = false, six = false;
+    
+        for (int i = 0; i < 5; i++) {
+            if (Joueur.des[i] == 1) un = true;
+            if (Joueur.des[i] == 2) deux = true;
+            if (Joueur.des[i] == 3) trois = true;
+            if (Joueur.des[i] == 4) quatre = true;
+            if (Joueur.des[i] == 5) cinq = true;
+            if (Joueur.des[i] == 6) six = true;
+        }
+
+        if ((un && deux && trois && quatre && cinq) || (deux && trois && quatre && cinq && six)) {
+            ok = true;
+        }
+    }
+
+    // challenge yam's
+    if (choix == "yam's") {
+        for (int i=1 ; i<=6 ; i++) {
+            int compteur = 0;
+            for (int j = 0; j < 5; j++) {
+                if (Joueur.des[j] == i) {
+                    compteur++;
+                }
+            }
+            if (compteur == 5) {
+                ok = true; 
+            }
+        }
+    }
+
+    // challenge chance
+    if (choix == "chance") {
+        ok = true; // challenge toujours ok
+    }
+
 }
