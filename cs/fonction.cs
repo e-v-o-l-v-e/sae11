@@ -1,4 +1,4 @@
- public static bool verifChallenges(CreatePlayer player, string choix) {
+ public static bool verifChallenges(ref CreatePlayer player, string choix) {
 
     bool ok = false;
     int somme = 0 ;
@@ -7,7 +7,7 @@
     // challenge nombre de 1
     if (choix == "nombre de 1") {
         for ( int i=0; i<5 ; i++) {
-            if (Joueur.des[i]==1) {
+            if (player.dices[i]==1) {
                 somme++;
             }
         }
@@ -19,7 +19,7 @@
     // challenge nombre de 2
     if (choix == "nombre de 2") {
         for ( int i=0; i<5 ; i++) {
-            if (Joueur.des[i]==2) {
+            if (player.dices[i]==2) {
                 somme++;
             }
         }
@@ -31,7 +31,7 @@
     // challenge nombre de 3
     if (choix == "nombre de 3") {
         for ( int i=0; i<5 ; i++) {
-            if (Joueur.des[i]==3) {
+            if (player.dices[i]==3) {
                 somme++;
             }
         }
@@ -43,7 +43,7 @@
     // challenge nombre de 4
     if (choix == "nombre de 4") {
         for ( int i=0; i<5 ; i++) {
-            if (Joueur.des[i]==4) {
+            if (player.dices[i]==4) {
                 somme++;
             }
         }
@@ -55,7 +55,7 @@
     // challenge nombre de 5
     if (choix == "nombre de 5") {
         for ( int i=0; i<5 ; i++) {
-            if (Joueur.des[i]==6) {
+            if (player.dices[i]==6) {
                 somme++;
             }
         }
@@ -67,7 +67,7 @@
     // challenge nombre de 6
     if (choix == "nombre de 6") {
         for ( int i=0; i<5 ; i++) {
-            if (Joueur.des[i]==6) {
+            if (player.dices[i]==6) {
                 somme++;
             }
         }
@@ -81,7 +81,7 @@
         for (int i=1 ; i<=6 ; i++) {   // pour chaque valeur possible du dé
             int compteur = 0;
             for (int j = 0; j < 5; j++) {       // Compter le nombre de fois la valeur apparait
-                if (Joueur.des[j] == i) {
+                if (player.dices[j] == i) {
                     compteur++;
                 }
             }
@@ -96,7 +96,7 @@
         for (int i = 1; i <= 6; i++) {
             int compteur = 0;
             for (int j = 0; j < 5; j++) {
-                if (Joueur.des[j] == i) {
+                if (player.dices[j] == i) {
                  compteur++;
                 }
             }
@@ -114,7 +114,7 @@
         for (int i = 1; i <= 6; i++) {
             int compteur = 0;
             for (int j = 0; j < 5; j++) {
-                if (Joueur.des[j] == i) {
+                if (player.dices[j] == i) {
                     compteur++;
                 }
             }
@@ -131,22 +131,22 @@
         bool un = false, deux = false, trois = false, quatre = false, cinq = false, six = false;
     
         for (int i = 0; i < 5; i++) {
-            if (Joueur.des[i] == 1) {
+            if (player.dices[i] == 1) {
                 un = true;
             }
-            if (Joueur.des[i] == 2) {
+            if (player.dices[i] == 2) {
                 deux = true;
             }
-            if (Joueur.des[i] == 3) {
+            if (player.dices[i] == 3) {
                 trois = true;
             }
-            if (Joueur.des[i] == 4) {
+            if (player.dices[i] == 4) {
                 quatre = true;
             }
-            if (Joueur.des[i] == 5) {
+            if (player.dices[i] == 5) {
                 cinq = true;
             }
-            if (Joueur.des[i] == 6) {
+            if (player.dices[i] == 6) {
                 six = true;
             }
         }
@@ -161,12 +161,12 @@
         bool un = false, deux = false, trois = false, quatre = false, cinq = false, six = false;
     
         for (int i = 0; i < 5; i++) {
-            if (Joueur.des[i] == 1) un = true;
-            if (Joueur.des[i] == 2) deux = true;
-            if (Joueur.des[i] == 3) trois = true;
-            if (Joueur.des[i] == 4) quatre = true;
-            if (Joueur.des[i] == 5) cinq = true;
-            if (Joueur.des[i] == 6) six = true;
+            if (player.dices[i] == 1) un = true;
+            if (player.dices[i] == 2) deux = true;
+            if (player.dices[i] == 3) trois = true;
+            if (player.dices[i] == 4) quatre = true;
+            if (player.dices[i] == 5) cinq = true;
+            if (player.dices[i] == 6) six = true;
         }
 
         if ((un && deux && trois && quatre && cinq) || (deux && trois && quatre && cinq && six)) {
@@ -179,7 +179,7 @@
         for (int i=1 ; i<=6 ; i++) {
             int compteur = 0;
             for (int j = 0; j < 5; j++) {
-                if (Joueur.des[j] == i) {
+                if (player.dices[j] == i) {
                     compteur++;
                 }
             }
