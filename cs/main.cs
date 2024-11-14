@@ -1,6 +1,6 @@
 using System;
 
-class Yams {
+public static partial class Yams {
 
   public struct CreatePlayer
   {
@@ -26,7 +26,7 @@ class Yams {
     public string Objectif;
     public string NombreDePoints;
 
-    public CreateChallenge(string challenge, string objectif, string nombreDePoints) {
+    public CreateChallenge(string challenge, string objectif, string nombreDePoints) {  // fonction createchallege pour simplifier l'attribution des attributs
       Challenge = challenge;
       Objectif = objectif;
       NombreDePoints = nombreDePoints;
@@ -49,11 +49,6 @@ class Yams {
 
   // on met les challenges dans un tableau challenges, les [0-5] sont pour les challenges mineurs, les [6-12] pour les majeurs.
   public static CreateChallenge[] challenges = new CreateChallenge[13] {nombreDe1,nombreDe2,nombreDe3,nombreDe4,nombreDe5,nombreDe6,brelan,carre,full,petiteSuite,grandeSuite,yams,chance};
-
-  /*static string[] challenges = {*/
-  /*  "Nombre de 1","Nombre de 2","Nombre de 3","Nombre de 4","Nombre de 5","Nombre de 6",*/
-  /*  "Brelan","Carré","Full","Petite suite","Grande suite","Yam's","Chance" */
-  /*}*/
 
   static void Main() {
   
