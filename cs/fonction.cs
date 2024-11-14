@@ -161,12 +161,24 @@
         bool un = false, deux = false, trois = false, quatre = false, cinq = false, six = false;
     
         for (int i = 0; i < 5; i++) {
-            if (player.dices[i] == 1) un = true;
-            if (player.dices[i] == 2) deux = true;
-            if (player.dices[i] == 3) trois = true;
-            if (player.dices[i] == 4) quatre = true;
-            if (player.dices[i] == 5) cinq = true;
-            if (player.dices[i] == 6) six = true;
+            if (player.dices[i] == 1) {
+             un = true;
+            }
+            if (player.dices[i] == 2) {
+             deux = true;
+            }
+            if (player.dices[i] == 3) {
+             trois = true;
+            }
+            if (player.dices[i] == 4) {
+             quatre = true;
+            }
+            if (player.dices[i] == 5) {
+             cinq = true;
+            }
+            if (player.dices[i] == 6) {
+             six = true;
+            }
         }
 
         if ((un && deux && trois && quatre && cinq) || (deux && trois && quatre && cinq && six)) {
