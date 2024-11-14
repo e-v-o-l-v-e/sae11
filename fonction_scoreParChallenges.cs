@@ -180,22 +180,22 @@ public static int scoreParChallenges(int choix, ref CreatePlayer player){
     
     //Challenge Yam's
     if (choix == 12) {
-        for (int i=1 ; i<=6 ; i++) {
+        for (int i=1 ; i<=6 ; i++) {        //Chaque valeur possible
             int compteur = 0;
-            for (int j = 0; j < 5; j++) {
-                if (player.dices[j] == i) {
+            for (int j = 0; j < 5; j++) {       //Chaque dé du joueur
+                if (player.dices[j] == i) {     //Si le dé est de la valeur
                     compteur++;
                 }
             }
-            if (compteur == 5) {
+            if (compteur == 5) {            //Si on a 5 dés de même valeur
                 score = 50; 
             }
         }
     }
     
     if(choix == 13){
-        for(int i=0; i<5; i++){
-            score += player.dices[i]; 
+        for(int i=0; i<5; i++){         //Pour chaque dé du joueur
+            score += player.dices[i];   //Ajout de la valeur au score
         }
     }
     
