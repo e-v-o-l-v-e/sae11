@@ -131,12 +131,24 @@ public static bool verifChallenges(struc Joueur, string choix) {
         bool un = false, deux = false, trois = false, quatre = false, cinq = false, six = false;
     
         for (int i = 0; i < 5; i++) {
-            if (Joueur.des[i] == 1) un = true;
-            if (Joueur.des[i] == 2) deux = true;
-            if (Joueur.des[i] == 3) trois = true;
-            if (Joueur.des[i] == 4) quatre = true;
-            if (Joueur.des[i] == 5) cinq = true;
-            if (Joueur.des[i] == 6) six = true;
+            if (Joueur.des[i] == 1) {
+                un = true;
+            }
+            if (Joueur.des[i] == 2) {
+                deux = true;
+            }
+            if (Joueur.des[i] == 3) {
+                trois = true;
+            }
+            if (Joueur.des[i] == 4) {
+                quatre = true;
+            }
+            if (Joueur.des[i] == 5) {
+                cinq = true;
+            }
+            if (Joueur.des[i] == 6) {
+                six = true;
+            }
         }
 
         if ((un && deux && trois && quatre) || (deux && trois && quatre && cinq) || (trois && quatre && cinq && six)) {
