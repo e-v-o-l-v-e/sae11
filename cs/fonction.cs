@@ -1,4 +1,4 @@
-public static bool verifChallenges(struc Joueur, string choix) {
+ public static bool verifChallenges(CreatePlayer player, string choix) {
 
     bool ok = false;
     int somme = 0 ;
