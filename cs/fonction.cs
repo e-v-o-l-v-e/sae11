@@ -205,5 +205,4 @@
     if (choix == "chance") {
         ok = true; // challenge toujours ok
     }
-
 }
