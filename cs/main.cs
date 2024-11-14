@@ -27,27 +27,29 @@ public static partial class Yams {
     public string Challenge;
     public string Objectif;
     public string NombreDePoints;
+    public int Tour;
 
-    public CreateChallenge(string challenge, string objectif, string nombreDePoints) {  // fonction createchallege pour simplifier l'attribution des attributs
+    public CreateChallenge(string challenge, string objectif, string nombreDePoints, int tour) {  // fonction createchallege pour simplifier l'attribution des attributs
       Challenge = challenge;
       Objectif = objectif;
       NombreDePoints = nombreDePoints;
+      Tour = tour;
     }
   }
 
-  public static CreateChallenge nombreDe1 = new CreateChallenge("Nombre de 1","Obtenir le plus grand nombre de 1","Somme des dés ayant obtenu 1");
-  public static CreateChallenge nombreDe2 = new CreateChallenge("Nombre de 2","Obtenir le plus grand nombre de 2","Somme des dés ayant obtenu 2");
-  public static CreateChallenge nombreDe3 = new CreateChallenge("Nombre de 3","Obtenir le plus grand nombre de 3","Somme des dés ayant obtenu 3");
-  public static CreateChallenge nombreDe4 = new CreateChallenge("Nombre de 4","Obtenir le plus grand nombre de 4","Somme des dés ayant obtenu 4");
-  public static CreateChallenge nombreDe5 = new CreateChallenge("Nombre de 5","Obtenir le plus grand nombre de 5","Somme des dés ayant obtenu 5");
-  public static CreateChallenge nombreDe6 = new CreateChallenge("Nombre de 6","Obtenir le plus grand nombre de 6","Somme des dés ayant obtenu 6");
-  public static CreateChallenge brelan = new CreateChallenge("Brelan","Obtenir 3 dés de même valeur","Somme des 3 dés identiques");
-  public static CreateChallenge carre = new CreateChallenge("Carré","Obtenir 4 dés de même valeur","Somme des 4 dés identiques");
-  public static CreateChallenge full = new CreateChallenge("Full","Obtenir 3 dés de même valeur + 2 dés de même valeur","25 points");
-  public static CreateChallenge petiteSuite = new CreateChallenge("Petite Suite","Obtenir 1-2-3-4 ou 2-3-4-5 ou 3-4-5-6","30 points");
-  public static CreateChallenge grandeSuite = new CreateChallenge("Grande Suite","Obtenir 1-2-3-4-5 ou 2-3-4-5-6","40 points");
-  public static CreateChallenge yams = new CreateChallenge("yams","Obtenir 5 dés de même valeur","50 points");
-  public static CreateChallenge chance = new CreateChallenge("Chance","Obtenir le maximum de points","Somme des dés obtenus");
+  public static CreateChallenge nombreDe1 = new CreateChallenge("Nombre de 1","Obtenir le plus grand nombre de 1","Somme des dés ayant obtenu 1",0);
+  public static CreateChallenge nombreDe2 = new CreateChallenge("Nombre de 2","Obtenir le plus grand nombre de 2","Somme des dés ayant obtenu 2",0);
+  public static CreateChallenge nombreDe3 = new CreateChallenge("Nombre de 3","Obtenir le plus grand nombre de 3","Somme des dés ayant obtenu 3",0);
+  public static CreateChallenge nombreDe4 = new CreateChallenge("Nombre de 4","Obtenir le plus grand nombre de 4","Somme des dés ayant obtenu 4",0);
+  public static CreateChallenge nombreDe5 = new CreateChallenge("Nombre de 5","Obtenir le plus grand nombre de 5","Somme des dés ayant obtenu 5",0);
+  public static CreateChallenge nombreDe6 = new CreateChallenge("Nombre de 6","Obtenir le plus grand nombre de 6","Somme des dés ayant obtenu 6",0);
+  public static CreateChallenge brelan = new CreateChallenge("Brelan","Obtenir 3 dés de même valeur","Somme des 3 dés identiques",0);
+  public static CreateChallenge carre = new CreateChallenge("Carré","Obtenir 4 dés de même valeur","Somme des 4 dés identiques",0);
+  public static CreateChallenge full = new CreateChallenge("Full","Obtenir 3 dés de même valeur + 2 dés de même valeur","25 points",0);
+  public static CreateChallenge petiteSuite = new CreateChallenge("Petite Suite","Obtenir 1-2-3-4 ou 2-3-4-5 ou 3-4-5-6","30 points",0);
+  public static CreateChallenge grandeSuite = new CreateChallenge("Grande Suite","Obtenir 1-2-3-4-5 ou 2-3-4-5-6","40 points",0);
+  public static CreateChallenge yams = new CreateChallenge("yams","Obtenir 5 dés de même valeur","50 points",0);
+  public static CreateChallenge chance = new CreateChallenge("Chance","Obtenir le maximum de points","Somme des dés obtenus",0);
 
   // on met les challenges dans un tableau challenges, les [0-5] sont pour les challenges mineurs, les [6-12] pour les majeurs.
   public static CreateChallenge[] challenges = new CreateChallenge[13] {nombreDe1,nombreDe2,nombreDe3,nombreDe4,nombreDe5,nombreDe6,brelan,carre,full,petiteSuite,grandeSuite,yams,chance};
