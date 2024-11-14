@@ -1,4 +1,4 @@
-dsing System;
+using System;
 
 public static partial class Yams {
 
@@ -16,7 +16,7 @@ public static partial class Yams {
       this.id = id;
       this.pseudo = "Unknown";
       this.dices = new int [13,5];
-      this.challenges = new int [13];
+      this.challenges = new int [13] {1,2,3,4,5,6,7,8,9,10,11,12,13};
       this.scoreRounds = new int [13];
       this.bonus = 0;
       this.scoreTotal = 0;
@@ -74,6 +74,22 @@ public static partial class Yams {
 
   static void tour (int n, ref CreatePlayer currentPlayer) {
     Console.WriteLine($"Tour {n} : {currentPlayer.pseudo}");
+
+    // affichage des challenges restant pour le joueur
+
+
+
+    // lancement des dés
+    // choix du joueur
+    // relance eventuelle
+    // choix du joueur
+    // relance eventuelle
+    //
+    //
+    // selection du challenge par le joueur
+    // verification de la disponibilité du challenge
+    //
+    // calcul du score
   }
 }
 
