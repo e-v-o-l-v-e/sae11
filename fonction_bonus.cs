@@ -1,9 +1,9 @@
-static int CalculerBonus(ref CreatePlayer player) {
+public static void CalculerBonus(CreateChallenge[] challenges, ref CreatePLayer player) {
   int somme = 0;  // somme des scores
 
   // on additionne les scores des 6 premiers challenges (mineurs)
-  for (int i = 0 ; i < 6 ; i++) {
-    somme += player.scoreRounds[i];
+  for (int i=0 ; i<6 ; i++) {
+    somme += challenge[i].score;
   }
 
   // tout les 63 points, on attribue le bonus
@@ -13,6 +13,4 @@ static int CalculerBonus(ref CreatePlayer player) {
   else {
     player.bonus = 0;
   }
-
-  return player.bonus;
 }
