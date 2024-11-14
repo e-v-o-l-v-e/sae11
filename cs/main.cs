@@ -91,5 +91,14 @@ public static partial class Yams {
     //
     // calcul du score
   }
+
+  public static void challengesRestants(ref CreatePlayer player, CreateChallenge[] challenges){
+    for(int i=0; i<5; i++){
+      if(player.challenges[i] != 0){
+        Console.WriteLine(challenges[player.challenges -1]);
+      }
+    }
+  }
+
 }
 
