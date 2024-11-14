@@ -13,3 +13,7 @@ repo git pour la sae11 de p11 et w11
     - [ ] css
     - [ ] interpretation json
     - [ ] javascript 
+
+
+extention :
+- plusieurs joueurs
