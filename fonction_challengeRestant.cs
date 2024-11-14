@@ -1,7 +1,7 @@
-public static void challengeRestant(struct Joueur, string[] noms_challenge){
+public static void challengeRestant(ref CreatePlayer player, string[] challenges){
   for(int i=0; i<5; i++){
-    if(Joueur.challenge[i] != 0){
-      Console.WriteLine(noms_challenge[Joueur.challenge -1]);
+    if(player.challenges[i] != 0){
+      Console.WriteLine(challenges[player.challenges -1]);
     }
   }
 }
