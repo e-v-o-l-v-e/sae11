@@ -1,4 +1,4 @@
-using System;
+dsing System;
 
 public static partial class Yams {
 
@@ -9,6 +9,7 @@ public static partial class Yams {
     public int[,] dices;         // on va stocker tous les des finaux de chaque rounds
     public int[] challenges;     // les challenges encore utilisable par le joueur
     public int[] scoreRounds;   // les scores de chaque round
+    public int bonus;
     public int scoreTotal;       // le score final
 
     public CreatePlayer(int id) {
@@ -17,6 +18,7 @@ public static partial class Yams {
       this.dices = new int [13,5];
       this.challenges = new int [13];
       this.scoreRounds = new int [13];
+      this.bonus = 0;
       this.scoreTotal = 0;
     }
   }
