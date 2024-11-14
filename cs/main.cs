@@ -70,15 +70,17 @@ public static partial class Yams {
     // tours de jeu
     for ( int i = 1 ; i <= 13 ; i++ ) {
       tour(i, ref player1);
+      Console.WriteLine($"Fin du tour du joueur 1.");
       tour(i, ref player2);
+      Console.WriteLine($"Fin du tour du joueur 2.");
     }
   }
 
   static void tour (int n, ref CreatePlayer currentPlayer) {
-    Console.WriteLine($"Tour {n} : {currentPlayer.pseudo}");
+    /*Console.WriteLine($"Tour {n} : {currentPlayer.pseudo}");*/
 
     // affichage des challenges restant pour le joueur
-
+    challengesRestants( ref currentPlayer);
 
 
     // lancement des dés
@@ -94,10 +96,10 @@ public static partial class Yams {
     // calcul du score
   }
 
-  public static void challengesRestants(ref CreatePlayer player, CreateChallenge[] challenges){
-    for(int i=0; i<5; i++){
-      if(player.challenges[i] != 0){
-        Console.WriteLine(challenges[player.challenges -1]);
+  public static void challengesRestants(ref CreatePlayer player){
+    for (int i = 0; i < 13; i++) {
+      if (player.challenges[i] != 0) {
+        Console.WriteLine($"{i+1} - { challenges[i].Challenge}");
       }
     }
   }
