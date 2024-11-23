@@ -9,15 +9,16 @@
 
   <body>
     <header>
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTKeSa8KyMkVlqzVFbceQ97EPNwIf0Eb7B-Dg&s"></img>
       <h1>Le glossaire des parties</h1>
       <form>
         <fieldset>
           <legend>Quelle partie voulez-vous consulter ?</legend>
           
           <div class="selection">
-            <div class="id">
-                <label for="id_partie">ID partie</label>
-                <input id="id_partie" name="id_partie" type="text">
+            <div class="nom">
+                <label for="nom_partie">Nom partie</label>
+                <input id="nom_partie" name="nom_partie" type="text">
                 <br/>
             </div>
             
@@ -39,16 +40,20 @@
     </header>
 
     <main>
+        <div id='partieComplete'>
+        
+        </div>
+        
+        <div id='partieReduite'>
+        
+        </div>
       
     </main>
 
     <footer>
       FOUILLEUL Elora, MUHARREMOGLU Açelya, MEGNIN-PREISS Ivanoë TP8
     </footer>
-
-
-
-
     
+    <script src="script.js"></script>
   </body>
 </html>
