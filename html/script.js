@@ -1,13 +1,16 @@
 const form = document.querySelector('form');
+let nomFichier;
+let affichage;
+let choix;
 
 form.addEventListener("submit", (event) => {
     // On récupère le nom de la partie et on affiche sa valeur
-    let nomFichier = document.getElementById("nom_partie").value;
+    nomFichier = document.getElementById("nom_partie").value;
 
     
     // Vérifier quel bouton radio est sélectionné
-    let affichage = document.querySelector('input[name="partie"]:checked');
-    let choix = affichage.value;
+    affichage = document.querySelector('input[name="partie"]:checked');
+    choix = affichage.value;
     
     /*    Si on veut dire qu'on a oublié de sélectionner un choix
     if (affichage) {
@@ -16,27 +19,25 @@ form.addEventListener("submit", (event) => {
         alert("Aucun choix de partie n'a été sélectionné.");
     }
     */
+    
+    fetch(`yams.iutrs.unistra.fr:3000/api/games/$(nomFichier)`)
+        .then(response => response.json())
+        .then(data => {
+            if(choix === 'tout'){
+                const partieEntiere = document.getElementById('partieComplete');
+                codeHTML = `
+                `;
+                partieEntiere.innerHTML = codeHTML;
+            }
+            else{
+                const tour = document.getElementById('partieReduite');
+                codeHTML = `
+                `;
+                tour.innerHTML = codeHTML;
+            }
+        })
+        .catch(error => console.error('Erreur de chargement du fichier', error));
 });
-
-
-
-fetch('yams.iutrs.unistra.fr:3000/api/games/`$(nomFichier)`')
-    .then(response => response.json())
-    .then(data => {
-        if(choix === 'tout'){
-            const partieEntiere = document.getElementById('partieComplete');
-            codeHTML = `
-            `;
-            partieEntiere.innerHTML = codeHTML;
-        }
-        else{
-            const tour = document.getElementById('partieReduite');
-            codeHTML = `
-            `;
-            tour.innerHTML = codeHTML;
-        }
-    })
-    .catch(error => console.error('Erreur de chargement du fichier', error));
     
 
     
