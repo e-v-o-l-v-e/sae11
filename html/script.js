@@ -6,11 +6,11 @@ form.addEventListener("submit", (event) => {
 
     
     // Vérifier quel bouton radio est sélectionné
-    let affichage = document.querySelector('input[name="partie"]');
+    let affichage = document.querySelector('input[name="partie"]:checked');
     let choix = affichage.value;
+    alert(choix);
     
     /*    Si on veut dire qu'on a oublié de sélectionner un choix
-    let affichage = document.querySelector('input[name="partie"]:checked');
     if (affichage) {
         let choix = affichage.value;
     } else {
