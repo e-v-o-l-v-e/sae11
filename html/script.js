@@ -8,7 +8,7 @@ form.addEventListener("submit", (event) => {
     // Vérifier quel bouton radio est sélectionné
     let affichage = document.querySelector('input[name="partie"]:checked');
     let choix = affichage.value;
-
+    
     /*    Si on veut dire qu'on a oublié de sélectionner un choix
     if (affichage) {
         let choix = affichage.value;
@@ -20,11 +20,21 @@ form.addEventListener("submit", (event) => {
 
 
 
-fetch('yams.iutrs.unistra.fr:3000/api/games/$(nomFichier)')
+fetch('yams.iutrs.unistra.fr:3000/api/games/`$(nomFichier)`')
     .then(response => response.json())
     .then(data => {
-        
-        
+        if(choix === 'tout'){
+            const partieEntiere = document.getElementById('partieComplete');
+            codeHTML = `
+            `;
+            partieEntiere.innerHTML = codeHTML;
+        }
+        else{
+            const tour = document.getElementById('partieReduite');
+            codeHTML = `
+            `;
+            tour.innerHTML = codeHTML;
+        }
     })
     .catch(error => console.error('Erreur de chargement du fichier', error));
     
