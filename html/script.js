@@ -2,8 +2,10 @@ let nomFichier;
 const form = document.querySelector('form');
 
 form.addEventListener("submit", (event) => {
+    /*
     // On empêche le comportement par défaut
     event.preventDefault();
+    */
 
     // On récupère le nom de la partie et on affiche sa valeur
     nomFichier = document.getElementById("nom_partie").value;
