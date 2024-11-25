@@ -39,6 +39,10 @@ public static partial class Yams {
     }
   }
 
+  public static Random rnd = new Random();
+
+
+  // on initialise tous les challenges
   public static CreateChallenge nombreDe1 = new CreateChallenge("Nombre de 1","Obtenir le plus grand nombre de 1","Somme des dés ayant obtenu 1",0,0);
   public static CreateChallenge nombreDe2 = new CreateChallenge("Nombre de 2","Obtenir le plus grand nombre de 2","Somme des dés ayant obtenu 2",0,0);
   public static CreateChallenge nombreDe3 = new CreateChallenge("Nombre de 3","Obtenir le plus grand nombre de 3","Somme des dés ayant obtenu 3",0,0);
@@ -69,24 +73,56 @@ public static partial class Yams {
     
     // tours de jeu
     for ( int i = 1 ; i <= 13 ; i++ ) {
-      Console.WriteLine($"Debut du tour {i} de {player1.pseudo}.");
       tour(i, ref player1);
-      Console.WriteLine($"Fin du tour.");
-      Console.WriteLine($"Debut du tour {i} de {player2.pseudo}.");
       tour(i, ref player2);
-      Console.WriteLine($"Fin du tour.");
     }
   }
 
   static void tour (int n, ref CreatePlayer currentPlayer) {
     /*Console.WriteLine($"Tour {n} : {currentPlayer.pseudo}");*/
+    Console.WriteLine();
+    Console.WriteLine($"Debut du tour {n} de {currentPlayer.pseudo}.");
 
     // affichage des challenges restant pour le joueur
     challengesRestants( ref currentPlayer);
 
-
     // lancement des dés
+    // initialisation des des à 0
+    int[,] des = new int[3,6];
+    int line = 0;
+    int compte = 0;
+    // appel fonction des qui change les 0 en int aleatoire entre 1 et 6
+    lancerDes(ref des, line);
+    
+    Console.WriteLine($"Voici vos dés ceux qui sont modifiables sont précédés d'une ~ :");
+    for (int i = 0 ; i < 6 ; i++ ) {
+      Console.Write($"~{des[line,i]}. ");
+    }
+    Console.WriteLine();
+
     // choix du joueur
+    for ( int i = 0 ; i < 6 ; i++ ) {
+      Console.WriteLine($"Souhaitez-vous garder le dé n{i+1} : {des[line,i]} ? y/*");
+      if ( 'y' == Console.ReadKey().KeyChar ) {
+        des[line+1,i] = des[line,i];
+        compte++;
+      } else {
+        des[line,i] = 0;
+      }
+    }
+    
+    line++;
+
+    
+    Console.Write($"Vous avez gardé {compte} dés. ");
+    for ( int i = 0 ; i < 6 ; i++ ) {
+      if ( des[line,i] != 0 ) {
+        Console.Write(des[line,i]);
+      }
+    }
+    Console.WriteLine();
+
+    /*if */
     // relance eventuelle
     // choix du joueur
     // relance eventuelle
@@ -96,12 +132,27 @@ public static partial class Yams {
     // verification de la disponibilité du challenge
     //
     // calcul du score
+
+
+    Console.WriteLine($"Fin du tour, appuyer sur une entrée pour continuer.");
+    Console.ReadLine();
+    Console.WriteLine();
   }
 
+  // on verifie les challenges pas encore utilisés par le jouer pour les lui afficher
   public static void challengesRestants(ref CreatePlayer player){
     for (int i = 0; i < 13; i++) {
       if (player.challenges[i] != 0) {
         Console.WriteLine($"{i+1} - { challenges[i].Challenge}");
+      }
+    }
+  }
+
+  // on jette les des qui doivent l'etre
+  public static void lancerDes (ref int[,] des, int line) {
+    for (int i = 0 ; i <  6 ; i++) {
+      if ( des[line,i] == 0 ) {
+        des[line,i] = rnd.Next(1,6);
       }
     }
   }
