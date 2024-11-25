@@ -87,18 +87,13 @@ public static partial class Yams {
     challengesRestants( ref currentPlayer);
 
     // lancement des dés
-    // initialisation des des à 0
-    int[,] des = new int[3,6];
-    int line = 0;
+    // initialisation des des à 0, on met 4 lignes car on verifie si un de peut etre relancer en fonction de l'etait de la meme colonne sur la ligne precedeente, exemple : des[2,3] est relançable seulement si des[1,3] == 0
+    int[,] des = new int[4,6];
+    int line = 1;
     int compte = 0;
     // appel fonction des qui change les 0 en int aleatoire entre 1 et 6
     lancerDes(ref des, line);
     
-    Console.WriteLine($"Voici vos dés ceux qui sont modifiables sont précédés d'une ~ :");
-    for (int i = 0 ; i < 6 ; i++ ) {
-      Console.Write($"~{des[line,i]}. ");
-    }
-    Console.WriteLine();
 
     // choix du joueur
     for ( int i = 0 ; i < 6 ; i++ ) {
@@ -111,9 +106,9 @@ public static partial class Yams {
       }
     }
     
+    // on monte d'un niveau pour check les des gardés et relancer les eventuels des pas gardés
     line++;
 
-    
     Console.Write($"Vous avez gardé {compte} dés. ");
     for ( int i = 0 ; i < 6 ; i++ ) {
       if ( des[line,i] != 0 ) {
@@ -122,11 +117,15 @@ public static partial class Yams {
     }
     Console.WriteLine();
 
+    
+    if ( compte < 6 ) {
+      lancerDes(ref des, line);
+    }
     /*if */
     // relance eventuelle
     // choix du joueur
     // relance eventuelle
-    //
+    // 
     //
     // selection du challenge par le joueur
     // verification de la disponibilité du challenge
@@ -150,12 +149,22 @@ public static partial class Yams {
 
   // on jette les des qui doivent l'etre
   public static void lancerDes (ref int[,] des, int line) {
+
     for (int i = 0 ; i <  6 ; i++) {
       if ( des[line,i] == 0 ) {
         des[line,i] = rnd.Next(1,6);
       }
     }
-  }
 
+    Console.WriteLine($"Voici vos dés ceux qui sont modifiables sont précédés d'une ~ :");
+    for (int i = 0 ; i < 6 ; i++ ) {
+      if ( des[line-1,i] == 0 ) {
+        Console.Write("~");
+      }
+      Console.Write($"{des[line,i]}. ");
+    }
+    Console.WriteLine();
+    
+  }
 }
 
