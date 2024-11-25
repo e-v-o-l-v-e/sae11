@@ -30,7 +30,7 @@ public static partial class Yams {
     public int Tour;
     public int Score;
 
-    public CreateChallenge(string challenge, string objectif, string nombreDePoints, int tour, int score) {  // fonction createchallege pour simplifier l'attribution des attributs
+    public CreateChallenge(string challenge, string objectif, string nombreDePoints, int tour, int score) {  // on cree la fonction createchallege pour simplifier l'attribution des differentes valeurs
       Challenge = challenge;
       Objectif = objectif;
       NombreDePoints = nombreDePoints;
@@ -69,10 +69,12 @@ public static partial class Yams {
     
     // tours de jeu
     for ( int i = 1 ; i <= 13 ; i++ ) {
+      Console.WriteLine($"Debut du tour {i} de {player1.pseudo}.");
       tour(i, ref player1);
-      Console.WriteLine($"Fin du tour du joueur 1.");
+      Console.WriteLine($"Fin du tour.");
+      Console.WriteLine($"Debut du tour {i} de {player2.pseudo}.");
       tour(i, ref player2);
-      Console.WriteLine($"Fin du tour du joueur 2.");
+      Console.WriteLine($"Fin du tour.");
     }
   }
 
