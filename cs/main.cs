@@ -15,7 +15,7 @@ public static partial class Yams {
     public Player(int id) {
       this.id = id;
       this.pseudo = "Unknown";
-      this.dices = new int [13,5];
+      this.dices = new int [13,6];
       this.challenges = new int [13] {1,2,3,4,5,6,7,8,9,10,11,12,13};
       this.scoreRounds = new int [13];
       this.bonus = 0;
@@ -80,24 +80,23 @@ public static partial class Yams {
     }
   }
 
+  // fonction du tour, n est le numero du tour (indexé à 0), on l'utilise pour attribuer correctement les des et les scores à chaque jouer et noter a quel tour chaque challenge est utilisé
   static void tour (int n, ref Player currentPlayer) {
-    /*Console.WriteLine($"Tour {n} : {currentPlayer.pseudo}");*/
+
+
     Console.WriteLine();
-    Console.WriteLine($"Debut du tour {n+1} de {currentPlayer.pseudo}.");
+    Console.WriteLine($"Debut du tour {n+1} de {currentPlayer.pseudo}.");   // on utilise n+1 car n est indexé à 0 mais ici l'information est destiné au joueur humain, donc on indexe à 1. 
 
     // affichage des challenges restant pour le joueur
     challengesRestants( ref currentPlayer);
 
     // initialisation des des à 0, on met 4 lignes car on verifie si un de peut etre relancer en fonction de l'etait de la meme colonne sur la ligne precedeente, exemple : des[2,3] est relançable seulement si des[1,3] == 0
-    int[,] des = new int[4,6];
+    int[,] dices = new int[4,6];
     int line = 1;
     bool relance = false;
-    // appel fonction des qui change les 0 en int aleatoire entre 1 et 6 pour la ligne du tour
-    lancerDes(ref des, line, ref relance);
 
-    for (int i = 0 ; i < 6 ; i++ ) {
-      currentPlayer.des[n,i] = des[line,i];
-    }
+    // appel fonction principale de tour qui change les 0 en int aleatoire entre 1 et 6 pour la ligne du tour puis demande au joueur quels dés ils souhaitent garder et indique lesquels peuvent être relancé
+    lancerDes(ref dices, line, ref relance);
 
     // on monte d'un niveau dans le tableau des dés
     line++;
@@ -105,7 +104,7 @@ public static partial class Yams {
     // on relance les des jusqu'a 2 fois si le joueur decide de relancer certain dés
     for (int i = 0 ; i < 2 ; i ++ ) {
       if ( relance ) {
-        lancerDes(ref des, line+i, ref relance);
+        lancerDes(ref dices, line+i, ref relance);
       }
     }
     // selection du challenge par le joueur
@@ -114,53 +113,67 @@ public static partial class Yams {
     // calcul du score
     
     
+    // on enregistre les des finaux dans la structure du joueur
+    for (int i = 0 ; i < 6 ; i++ ) {
+      currentPlayer.dices[n,i] = dices[line,i];
+    }
+
     Console.WriteLine($"Fin du tour, appuyer sur une entrée pour continuer.");
     Console.ReadLine();
     Console.WriteLine();
   }
 
+
   // on verifie les challenges pas encore utilisés par le jouer pour les lui afficher
   public static void challengesRestants(ref Player currentPlayer){
     for (int i = 0; i < 13; i++) {
-      if (player.challenges[i] != 0) {
-        Console.WriteLine($"{i+1} - { challenges[i].Challenge}");
+      if (currentPlayer.challenges[i] != 0) {
+        Console.WriteLine($"{i+1} - { challenges[i].challenge}");
       }
     }
   }
 
   // on jette les des qui doivent l'etre
-  public static void lancerDes (ref int[,] des, int line, ref bool relance) {
+  public static void lancerDes (ref int[,] dices, int line, ref bool relance) {
 
+    relance = false;
+      
     for (int i = 0 ; i <  6 ; i++) {
-      if ( des[line,i] == 0 ) {
-        des[line,i] = rnd.Next(1,6);
+      if ( dices[line,i] == 0 ) {
+        dices[line,i] = rnd.Next(1,6);
       }
     }
 
-    Console.Write($"Voici vos dés.");
+    Console.Write($"Voici vos dé : ");
     for (int i = 0 ; i < 6 ; i++ ) {
-      Console.Write($"{des[line,i]}. ");
+      Console.Write($"{dices[line,i]}. ");
     }
+    Console.WriteLine();
 
 
     if ( line < 3 ) {
-      Console.Write($"Voici vos dés modifiables sont précédés d'une ~ :");
+      Console.Write($"Voici vos dés modifiables : ");
       for (int i = 0 ; i < 6 ; i++ ) {
-        if ( des[line-1,i] == 0 ) {
-          Console.Write("~");
+        if ( dices[line-1,i] == 0 ) {
+          Console.Write($"{dices[line,i]}. ");
         }
-        Console.Write($"{des[line,i]}. ");
       }
       Console.WriteLine();
 
       // choix du joueur
       for ( int i = 0 ; i < 6 ; i++ ) {
-        Console.WriteLine($"Souhaitez-vous garder le dé n{i+1} : {des[line,i]} ? y/*");
-        if ( 'y' == Console.ReadKey().KeyChar ) {
-          des[line+1,i] = des[line,i];
+
+        if ( dices[line-1,i] == 0 ) {
+          Console.Write($"Souhaitez-vous garder le dé n{i+1} : {dices[line,i]} ? y/*. ");
+          if ( 'y' == Console.ReadKey().KeyChar ) {
+            dices[line+1,i] = dices[line,i];
+          } else {
+            dices[line,i] = 0;
+            relance = true;
+          }
+          Console.WriteLine();
         } else {
-          des[line,i] = 0;
-          relance = true;
+          dices[line+1,i] = dices[line,i];
         }
       }
       Console.WriteLine();
