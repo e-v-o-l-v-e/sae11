@@ -80,12 +80,12 @@ public static partial class Yams {
     }
   }
 
-  // fonction du tour, n est le numero du tour (indexé à 0), on l'utilise pour attribuer correctement les des et les scores à chaque jouer et noter a quel tour chaque challenge est utilisé
-  static void tour (int n, ref Player currentPlayer) {
+  // fonction du tour, tour est le numero du tour (indexé à 0), on l'utilise pour attribuer correctement les des et les scores à chaque jouer et noter a quel tour chaque challenge est utilisé
+  static void tour (int tour, ref Player currentPlayer) {
 
 
     Console.WriteLine();
-    Console.WriteLine($"Debut du tour {n+1} de {currentPlayer.pseudo}.");   // on utilise n+1 car n est indexé à 0 mais ici l'information est destiné au joueur humain, donc on indexe à 1. 
+    Console.WriteLine($"Debut du tour {tour+1} de {currentPlayer.pseudo}.");   // on utilise tour+1 car tour est indexé à 0 mais ici l'information est destiné au joueur humain, donc on indexe à 1. 
 
     // affichage des challenges restant pour le joueur
     challengesRestants( ref currentPlayer);
@@ -107,17 +107,33 @@ public static partial class Yams {
         lancerDes(ref dices, line+i, ref relance);
       }
     }
-    // selection du challenge par le joueur
-    // verification de la disponibilité du challenge
-    //
-    // calcul du score
-    
-    
+
     // on enregistre les des finaux dans la structure du joueur
     for (int i = 0 ; i < 6 ; i++ ) {
-      currentPlayer.dices[n,i] = dices[line,i];
+      currentPlayer.dices[tour,i] = dices[line,i];
     }
 
+    challengesRestants( ref currentPlayer);
+
+
+    int choix;
+    bool validiteChoix = false;
+
+    // on verifie si le challenge est encore jouable
+    while ( !validiteChoix) {
+      Console.WriteLine("Quel challenge souhaitez-vous jouer ? : ");
+      choix = int.Parse(Console.ReadLine());
+      for (int i = 0 ; i < 13 ; i++) {
+        if ( validiteChoix == currentPlayer.challenges[i] ) {
+          validiteChoix = true;
+        }
+      }
+    }
+
+    // on calcule le score
+    calcScore(choix, tour, ref currentPlayer);
+
+    
     Console.WriteLine($"Fin du tour, appuyer sur une entrée pour continuer.");
     Console.ReadLine();
     Console.WriteLine();
@@ -132,6 +148,7 @@ public static partial class Yams {
       }
     }
   }
+
 
   // on jette les des qui doivent l'etre
   public static void lancerDes (ref int[,] dices, int line, ref bool relance) {
@@ -178,6 +195,47 @@ public static partial class Yams {
       }
       Console.WriteLine();
     }
+  }
+
+  public static void calcScore( int choix, int tour, ref Player currentPlayer) {
+    
+    int score = 0;
+
+    if ( choix < 6 ) {
+      for ( int i = 0 ; i < 6 ; i++ ) {
+        if ( currentPlayer.dices[tour,i] == i+1 ) {
+          score += i+1;
+        }
+      }
+    }
+    
+    switch (choix)
+    {
+      case 6:
+        bool ok = false;
+        int n;
+        for (int i=1 ; i<=6 ; i++) {   // pour chaque valeur possible du dé
+          int compteur = 0;
+          for (int j = 0; j < 5; j++) {       // Compter le nombre de fois la valeur apparait
+            if (player.dices[j] == i) {
+              compteur++;
+            }
+          }
+          if (compteur >= 3) {
+            ok = true;
+            n = i;
+          }
+        }
+        if ( ok ) {
+          score = 3*n; 
+        }
+
+
+      default:
+        score = 0;
+        break;
+    } 
+
   }
 }
 
