@@ -152,6 +152,7 @@ public static partial class Yams {
       {
         validiteChoix = true;
         currentPlayer.challRestants[choix] = false;
+        currentPlayer.challTour[tour] = choix;
       } 
       else 
       {
@@ -383,7 +384,6 @@ public static partial class Yams {
           break;
       } 
     }
-
     currentPlayer.scoreRounds[tour] = score;
     currentPlayer.scoreTotal += score;
   }

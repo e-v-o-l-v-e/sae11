@@ -1,4 +1,4 @@
-public static void CalculerBonus(CreateChallenge[] challenges, ref CreatePLayer player) {
+public static void CalculerBonus(ref CreatePLayer currentPlayer) {
   int somme = 0;  // somme des scores
 
   // on additionne les scores des 6 premiers challenges (mineurs)
