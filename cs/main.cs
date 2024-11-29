@@ -7,7 +7,8 @@ public static partial class Yams {
     public int id;               // id du joueur, 1 ou 2 etant donnée que le nombre max de jouer est 2
     public string pseudo;        // pseudo du joueur
     public int[,] dices;         // on va stocker tous les des finaux de chaque rounds
-    public int[] challenges;     // les challenges encore utilisable par le joueur
+    public bool[] challRestants;     // les challenges encore utilisable par le joueur
+    public int[] challTour;
     public int[] scoreRounds;   // les scores de chaque round
     public int bonus;
     public int scoreTotal;       // le score final
@@ -16,7 +17,8 @@ public static partial class Yams {
       this.id = id;
       this.pseudo = "Unknown";
       this.dices = new int [13,5];
-      this.challenges = new int [13] {1,2,3,4,5,6,7,8,9,10,11,12,13};
+      this.challRestants = new bool [13] {true, true, true, true, true, true, true, true, true, true, true, true ,true};
+      this.challTour = new int [13];
       this.scoreRounds = new int [13];
       this.bonus = 0;
       this.scoreTotal = 0;
@@ -37,6 +39,11 @@ public static partial class Yams {
       this.tour = tour;
       this.score = score;
     }
+    
+    public override string ToString() {
+      return $"{challenge}, objectif : {objectif}, points :  {nombreDePoints}";
+    }
+
   }
   // on initialise tous les challenges
   public static Challenge nombreDe1 = new Challenge("Nombre de 1","Obtenir le plus grand nombre de 1","Somme des dés ayant obtenu 1",0,0);
@@ -74,7 +81,8 @@ public static partial class Yams {
     player2.pseudo = Console.ReadLine();
     
     // tours de jeu
-    for ( int i = 0 ; i < 13 ; i++ ) {
+    for ( int i = 0 ; i < 13 ; i++ ) 
+    {
       tour(i, ref player1);
       tour(i, ref player2);
     }
@@ -82,7 +90,6 @@ public static partial class Yams {
 
   // fonction du tour, tour est le numero du tour (indexé à 0), on l'utilise pour attribuer correctement les des et les scores à chaque jouer et noter a quel tour chaque challenge est utilisé
   static void tour (int tour, ref Player currentPlayer) {
-
 
     Console.WriteLine();
     Console.WriteLine($"Debut du tour {tour+1} de {currentPlayer.pseudo}.");   // on utilise tour+1 car tour est indexé à 0 mais ici l'information est destiné au joueur humain, donc on indexe à 1. 
@@ -116,23 +123,45 @@ public static partial class Yams {
     challengesRestants( ref currentPlayer);
 
 
-    int choix = 0;
+    int choix = -1;
     bool validiteChoix = false;
 
     // on verifie si le challenge est encore jouable
     while ( validiteChoix == false ) {
-      Console.WriteLine("Quel challenge souhaitez-vous jouer ? : ");
-      choix = int.Parse(Console.ReadLine()) -1;
-      for (int i = 0 ; i < 13 ; i++) {
-        if ( choix == currentPlayer.challenges[i] ) {
-          validiteChoix = true;
+      Console.Write("Quel challenge souhaitez-vous jouer ? : ");
+      
+      if ( !int.TryParse(Console.ReadLine(), out choix) ) 
+      {
+        validiteChoix = false;
+        choix = -10;
+      } 
+      choix--;
+        
+      Console.WriteLine();
+
+      if ( choix == -1 ) 
+      {
+        for ( int i = 0 ; i < 13 ; i++ ) {
+          if ( currentPlayer.challRestants[i] ) {
+            Console.WriteLine(challenges[i].ToString());
+          }
         }
+        Console.WriteLine();
+      } 
+      else if ( choix >= -1 && choix < 13 && currentPlayer.challRestants[choix] ) 
+      {
+        validiteChoix = true;
+        currentPlayer.challRestants[choix] = false;
+      } 
+      else 
+      {
+        Console.WriteLine("Vous devez choisir un nombre entre 0 et 13 (inclus).");
       }
     }
 
     // on calcule le score
     calcScore(choix, tour, ref currentPlayer);
-
+    Console.WriteLine($"Vous avez choisis le challenge {challenges[choix].challenge}, ce qui vous apporte {currentPlayer.scoreRounds[tour]}, pour un score total actuellement de {currentPlayer.scoreTotal}.");
     
     Console.WriteLine($"Fin du tour, appuyer sur une entrée pour continuer.");
     Console.ReadLine();
@@ -143,7 +172,7 @@ public static partial class Yams {
   // on verifie les challenges pas encore utilisés par le jouer pour les lui afficher
   public static void challengesRestants(ref Player currentPlayer){
     for (int i = 0; i < 13; i++) {
-      if (currentPlayer.challenges[i] != 0) {
+      if (currentPlayer.challRestants[i] ) {
         Console.WriteLine($"{i+1} - { challenges[i].challenge}");
       }
     }
@@ -161,7 +190,7 @@ public static partial class Yams {
       }
     }
 
-    Console.Write($"Voici vos dé : ");
+    Console.Write($"Voici vos dés : ");
     for (int i = 0 ; i < 5 ; i++ ) {
       Console.Write($"{dices[line,i]}. ");
     }
@@ -170,7 +199,7 @@ public static partial class Yams {
 
     if ( line < 3 ) {
       Console.Write($"Voici vos dés modifiables : ");
-      for (int i = 0 ; i < 6 ; i++ ) {
+      for (int i = 0 ; i < 5 ; i++ ) {
         if ( dices[line-1,i] == 0 ) {
           Console.Write($"{dices[line,i]}. ");
         }
@@ -195,6 +224,7 @@ public static partial class Yams {
       }
       Console.WriteLine();
     }
+    Console.WriteLine();
   }
 
 
@@ -204,153 +234,155 @@ public static partial class Yams {
 
     if ( choix < 6 ) {
       for ( int i = 0 ; i < 5 ; i++ ) {
-        if ( currentPlayer.dices[tour,i] == i+1 ) {
-          score += i+1;
+        Console.WriteLine($"{tour} ; {i} ; {choix}");
+        if ( currentPlayer.dices[tour,i] == choix+1 ) {
+          score += choix+1;
         }
       }
+    } else {
+      switch (choix)
+      {
+        // brelan
+        case 6:
+          for (int i = 1 ; i <= 6 ; i++) {   // pour chaque valeur possible du dé
+            int compteur = 0;
+            for (int j = 0 ; j < 5 ; j++) {       // Compter le nombre de fois la valeur apparait
+              if (currentPlayer.dices[tour,j] == i) {
+                compteur++;
+              }
+            }
+            if (compteur >= 3) {
+              score = 3*i;
+            }
+          }
+          break;
+
+          // carre
+        case 7:
+          for (int i = 1 ; i <= 6 ; i++) {   // pour chaque valeur possible du dé
+            int compteur = 0;
+            for (int j = 0; j < 5; j++) {       // Compter le nombre de fois la valeur apparait
+              if (currentPlayer.dices[tour,j] == i) {
+                compteur++;
+              }
+            }
+            if (compteur >= 4) {
+              score = 4*i;
+            }
+          }
+          break;
+
+          // full
+        case 8:
+          bool trois = false;  // 3 dés de mm valeurs
+          bool deux = false;   // 2 dés de mm valeurs
+
+          for (int i = 1; i <= 6; i++) {
+            int compteur = 0;
+            for (int j = 0; j < 5; j++) {
+              if (currentPlayer.dices[tour,j] == i) {
+                compteur++;
+              }
+            }
+            if (compteur == 3) trois = true;
+            if (compteur == 2) deux = true;
+          }
+          if (trois && deux) {   
+            score = 25;
+          }
+          break;
+
+          // petite Suite
+        case 9:
+          bool un = false, quatre = false, cinq = false, six = false;
+          deux = false;
+          trois = false;
+
+          for (int i = 0; i < 5; i++) {
+            if (currentPlayer.dices[tour,i] == 1) {
+              un = true;
+            }
+            if (currentPlayer.dices[tour,i] == 2) {
+              deux = true;
+            }
+            if (currentPlayer.dices[tour,i] == 3) {
+              trois = true;
+            }
+            if (currentPlayer.dices[tour,i] == 4) {
+              quatre = true;
+            }
+            if (currentPlayer.dices[tour,i] == 5) {
+              cinq = true;
+            }
+            if (currentPlayer.dices[tour,i] == 6) {
+              six = true;
+            }
+          }
+          if ((un && deux && trois && quatre) || (deux && trois && quatre && cinq) || (trois && quatre && cinq && six)) {
+            score = 30;
+          }
+          break;
+
+          // grande suite
+        case 10:
+          un = false;
+          deux = false;
+          trois = false;
+          quatre = false;
+          cinq = false;
+          six = false;
+
+          for (int i = 0; i < 5; i++) {
+            if (currentPlayer.dices[tour,i] == 1) {
+              un = true;
+            }
+            if (currentPlayer.dices[tour,i] == 2) {
+              deux = true;
+            }
+            if (currentPlayer.dices[tour,i] == 3) {
+              trois = true;
+            }
+            if (currentPlayer.dices[tour,i] == 4) {
+              quatre = true;
+            }
+            if (currentPlayer.dices[tour,i] == 5) {
+              cinq = true;
+            }
+            if (currentPlayer.dices[tour,i] == 6) {
+              six = true;
+            }
+          }
+          if ((un && deux && trois && quatre && cinq) || (deux && trois && quatre && cinq && six)) {
+            score = 40;
+          }
+          break;
+
+          // yams
+        case 11:
+          int tmp = 50;
+
+          int d = currentPlayer.dices[tour,0];
+          for (int i = 1 ; i < 5 ; i++) {
+            if ( d != currentPlayer.dices[tour,i] ) {
+              tmp = 0;
+            }
+          }
+          score = tmp;
+          break;
+
+          // chance
+        case 12:
+          tmp = 0;
+          for ( int i = 0 ; i < 5 ; i++ ) {
+            tmp += currentPlayer.dices[tour,i];
+          }
+          score = tmp;
+          break;
+
+        default:
+          break;
+      } 
     }
-    
-    switch (choix)
-    {
-      // brelan
-      case 6:
-        bool ok = false;
-        int n;
-        for (int i = 1 ; i <= 6 ; i++) {   // pour chaque valeur possible du dé
-          int compteur = 0;
-          for (int j = 0 ; j < 5 ; j++) {       // Compter le nombre de fois la valeur apparait
-            if (currentPlayer.dices[tour,j] == i) {
-              compteur++;
-            }
-          }
-          if (compteur >= 3) {
-            ok = true;
-            score = 3*i;
-          }
-        }
-        break;
-
-      // carre
-      case 7:
-        for (int i = 1 ; i <= 6 ; i++) {   // pour chaque valeur possible du dé
-          int compteur = 0;
-          for (int j = 0; j < 5; j++) {       // Compter le nombre de fois la valeur apparait
-            if (currentPlayer.dices[tour,j] == i) {
-              compteur++;
-            }
-          }
-          if (compteur >= 4) {
-            score = 4*i;
-          }
-        }
-        break;
-
-      // full
-      case 8:
-        bool trois = false;  // 3 dés de mm valeurs
-        bool deux = false;   // 2 dés de mm valeurs
-
-        for (int i = 1; i <= 6; i++) {
-          int compteur = 0;
-          for (int j = 0; j < 5; j++) {
-            if (currentPlayer.dices[tour,j] == i) {
-              compteur++;
-            }
-          }
-          if (compteur == 3) trois = true;
-          if (compteur == 2) deux = true;
-        }
-        if (trois && deux) {   
-          score = 25;
-        }
-        break;
-
-        // petite Suite
-      case 9:
-        bool un = false, quatre = false, cinq = false, six = false;
-        deux = false;
-        trois = false;
-
-        for (int i = 0; i < 5; i++) {
-          if (currentPlayer.dices[tour,i] == 1) {
-            un = true;
-          }
-          if (currentPlayer.dices[tour,i] == 2) {
-            deux = true;
-          }
-          if (currentPlayer.dices[tour,i] == 3) {
-            trois = true;
-          }
-          if (currentPlayer.dices[tour,i] == 4) {
-            quatre = true;
-          }
-          if (currentPlayer.dices[tour,i] == 5) {
-            cinq = true;
-          }
-          if (currentPlayer.dices[tour,i] == 6) {
-            six = true;
-          }
-        }
-        if ((un && deux && trois && quatre) || (deux && trois && quatre && cinq) || (trois && quatre && cinq && six)) {
-          score = 30;
-        }
-        break;
-
-      // grande suite
-      case 10:
-        un = false;
-        deux = false;
-        trois = false;
-        quatre = false;
-        cinq = false;
-        six = false;
-
-        for (int i = 0; i < 5; i++) {
-          if (currentPlayer.dices[tour,i] == 1) {
-            un = true;
-          }
-          if (currentPlayer.dices[tour,i] == 2) {
-            deux = true;
-          }
-          if (currentPlayer.dices[tour,i] == 3) {
-            trois = true;
-          }
-          if (currentPlayer.dices[tour,i] == 4) {
-            quatre = true;
-          }
-          if (currentPlayer.dices[tour,i] == 5) {
-            cinq = true;
-          }
-          if (currentPlayer.dices[tour,i] == 6) {
-            six = true;
-          }
-        }
-        if ((un && deux && trois && quatre && cinq) || (deux && trois && quatre && cinq && six)) {
-          score = 40;
-        }
-        break;
-
-      case 11:
-        score = 50;
-
-        int d = currentPlayer.dices[tour,0];
-        for (int i = 1 ; i < 5 ; i++) {
-          if ( d != currentPlayer.dices[tour,i] ) {
-            score = 0;
-          }
-        }
-        break;
-        
-      case 12:
-        score = 0;
-        for ( int i = 0 ; i < 5 ; i++ ) {
-          score += currentPlayer.dices[tour,i];
-        }
-
-      default:
-        score = 0;
-        break;
-    } 
 
     currentPlayer.scoreRounds[tour] = score;
     currentPlayer.scoreTotal += score;
