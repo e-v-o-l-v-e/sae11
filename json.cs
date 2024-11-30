@@ -1,3 +1,34 @@
+public static void Jason(Player player1, Player player2) {
+        // Génération du JSON
+        string json = "{\n" +
+                      "  \"parameters\": {\n" +
+                      "    \"code\": \"groupe1-001\",\n" +
+                      "    \"date\": \"" + DateTime.Now.ToString("yyyy-MM-dd") + "\"\n" +
+                      "  },\n" +
+                      "  \"players\": [\n" +
+                      "    {\n" +
+                      "      \"id\": " + player1.id + ",\n" +
+                      "      \"pseudo\": \"" + player1.pseudo + "\"\n" +
+                      "    },\n" +
+                      "    {\n" +
+                      "      \"id\": " + player2.id + ",\n" +
+                      "      \"pseudo\": \"" + player2.pseudo + "\"\n" +
+                      "    }\n" +
+                      "  ],\n" +
+                      "  \"rounds\": [\n" +
+                      Rounds(player1, player2) + "\n" +
+                      "  ],\n" +
+                      "  \"final_result\": [\n" +
+                      FinalResult(player1, player2) + "\n" +
+                      "  ]\n" +
+                      "}";
+
+        // Sauvegarder dans un fichier
+        using (StreamWriter writer = new StreamWriter("res.json")) {
+            writer.WriteLine(json);
+        }
+  }
+
 public static string Rounds(Player player1, Player player2) {
         string rounds = "";
         for (int i = 0; i < 13; i++) { // Afficher 13 rounds
