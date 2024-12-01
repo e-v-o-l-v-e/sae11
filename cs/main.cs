@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 
 public static partial class Yams {
 
@@ -82,6 +83,15 @@ public static partial class Yams {
       tour(i, ref player1);
       tour(i, ref player2);
     }
+
+    calcBonus(ref player1);
+    calcBonus(ref player2);
+
+    jason(player1, player2);
+
+    Console.WriteLine("La partie est finis, voici vos scores : ");
+    Console.WriteLine($"{player1.pseudo} : {player1.scoreTotal}");
+    Console.WriteLine($"{player2.pseudo} : {player2.scoreTotal}");
   }
 
   // numTour indexé à 0, on l'utilise pour attribuer correctement les des et les scores à chaque jouer et noter a quel tour chaque challenge est utilisé
@@ -161,8 +171,6 @@ public static partial class Yams {
     calcScore(choix, numTour, ref currentPlayer);
     Console.WriteLine($"Vous avez choisis le challenge {challenges[choix].challenge}, ce qui vous apporte {currentPlayer.scoreTour[numTour]}, pour un score total actuellement de {currentPlayer.scoreTotal}.");
     
-    
-
     Console.WriteLine($"Fin du tour, appuyer sur une entrée pour continuer.");
     Console.ReadLine();
     Console.WriteLine();
@@ -377,7 +385,7 @@ public static partial class Yams {
   }
 
 
-  public static void CalculerBonus(ref Player currentPlayer) {
+  public static void calcBonus(ref Player currentPlayer) {
     int somme = 0;  // somme des scores
 
     // on additionne les scores des 6 premiers challenges (mineurs)
@@ -396,5 +404,96 @@ public static partial class Yams {
     }
     currentPlayer.scoreTotal += currentPlayer.bonus;
   }
+
+  public static void jason(Player player1, Player player2) {
+    // Génération du JSON
+    string json = "{\n" +
+      "  \"parameters\": {\n" +
+      "    \"code\": \"groupe1-001\",\n" +
+      "    \"date\": \"" + DateTime.Now.ToString("yyyy-MM-dd") + "\"\n" +
+      "  },\n" +
+      "  \"players\": [\n" +
+      "    {\n" +
+      "      \"id\": " + player1.id + ",\n" +
+      "      \"pseudo\": \"" + player1.pseudo + "\"\n" +
+      "    },\n" +
+      "    {\n" +
+      "      \"id\": " + player2.id + ",\n" +
+      "      \"pseudo\": \"" + player2.pseudo + "\"\n" +
+      "    }\n" +
+      "  ],\n" +
+      "  \"rounds\": [\n" +
+      Rounds(player1, player2) + "\n" +
+      "  ],\n" +
+      "  \"final_result\": [\n" +
+      FinalResult(player1, player2) + "\n" +
+      "  ]\n" +
+      "}";
+
+    // Sauvegarder dans un fichier
+    using (StreamWriter writer = new StreamWriter("res.json")) {
+      writer.WriteLine(json);
+    }
+  }
+
+  public static string Rounds(Player player1, Player player2) {
+    string rounds = "";
+    for (int i = 0; i < 13; i++) { // Afficher 13 rounds
+      rounds += "    {\n" +
+        "      \"id\": " + (i + 1) + ",\n" + // ID des rounds commence à 1
+        "      \"results\": [\n" +
+        "        {\n" +
+        "          \"id_player\": " + player1.id + ",\n" +
+        "          \"dice\": [" + Des(player1.dices, i) + "],\n" +
+        "          \"challenge\": \"" + ChallengeName(player1.challTour[i]) + "\",\n" +
+        "          \"score\": " + player1.scoreTour[i] + "\n" +
+        "        },\n" +
+        "        {\n" +
+        "          \"id_player\": " + player2.id + ",\n" +
+        "          \"dice\": [" + Des(player2.dices, i) + "],\n" +
+        "          \"challenge\": \"" + ChallengeName(player2.challTour[i]) + "\",\n" +
+        "          \"score\": " + player2.scoreTour[i] + "\n" +
+        "        }\n" +
+        "      ]\n" +
+        "    }";
+
+      if (i < 12) { // Ajouter une virgule sauf pour le dernier round
+        rounds += ",";
+      }
+      rounds += "\n";
+    }
+    return rounds;
+  }
+
+  public static string Des(int[,] dices, int round) {
+    string res = "";
+    for (int i = 0; i < dices.GetLength(1); i++) {
+      res += dices[round, i];
+      if (i < dices.GetLength(1) - 1) {
+        res += ", ";
+      }
+    }
+    return res;
+  }
+
+  public static string ChallengeName(int challengeId) {
+    string[] challenges = { "nombreDe1","nombreDe2","nombreDe3","nombreDe4","nombreDe5","nombreDe6","brelan","carre","full","petiteSuite","grandeSuite","yams","chance" };
+    return challenges[challengeId];
+  }
+
+  public static string FinalResult(Player player1, Player player2) {
+    return "    {\n" +
+      "      \"id_player\": " + player1.id + ",\n" +
+      "      \"bonus\": " + player1.bonus + ",\n" +
+      "      \"score\": " + player1.scoreTotal + "\n" +
+      "    },\n" +
+      "    {\n" +
+      "      \"id_player\": " + player2.id + ",\n" +
+      "      \"bonus\": " + player2.bonus + ",\n" +
+      "      \"score\": " + player2.scoreTotal + "\n" +
+      "    }";
+  }
+
+
 }
 
