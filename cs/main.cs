@@ -9,7 +9,7 @@ public static partial class Yams {
     public int[,] dices;         // on va stocker tous les des finaux de chaque rounds
     public bool[] challRestants;     // les challenges encore utilisable par le joueur
     public int[] challTour;
-    public int[] scoreRounds;   // les scores de chaque round
+    public int[] scoreTour;   // les scores de chaque round
     public int bonus;
     public int scoreTotal;       // le score final
 
@@ -19,7 +19,7 @@ public static partial class Yams {
       this.dices = new int [13,5];
       this.challRestants = new bool [13] {true, true, true, true, true, true, true, true, true, true, true, true ,true};
       this.challTour = new int [13];
-      this.scoreRounds = new int [13];
+      this.scoreTour = new int [13];
       this.bonus = 0;
       this.scoreTotal = 0;
     }
@@ -29,36 +29,32 @@ public static partial class Yams {
     public string challenge;
     public string objectif;
     public string nombreDePoints;
-    public int tour;
-    public int score;
 
-    public Challenge(string challenge, string objectif, string nombreDePoints, int tour, int score) {  // on cree la fonction createchallege pour simplifier l'attribution des differentes valeurs
+    public Challenge(string challenge, string objectif, string nombreDePoints) {  // on cree la fonction createchallege pour simplifier l'attribution des differentes valeurs
       this.challenge = challenge;
       this.objectif = objectif;
       this.nombreDePoints = nombreDePoints;
-      this.tour = tour;
-      this.score = score;
     }
     
     public override string ToString() {
-      return $"{challenge}, objectif : {objectif}, points :  {nombreDePoints}";
+      return $"{challenge.PadRight(15)} | {objectif.PadRight(52)}| {nombreDePoints.PadRight(20)}";
     }
 
   }
   // on initialise tous les challenges
-  public static Challenge nombreDe1 = new Challenge("Nombre de 1","Obtenir le plus grand nombre de 1","Somme des dés ayant obtenu 1",0,0);
-  public static Challenge nombreDe2 = new Challenge("Nombre de 2","Obtenir le plus grand nombre de 2","Somme des dés ayant obtenu 2",0,0);
-  public static Challenge nombreDe3 = new Challenge("Nombre de 3","Obtenir le plus grand nombre de 3","Somme des dés ayant obtenu 3",0,0);
-  public static Challenge nombreDe4 = new Challenge("Nombre de 4","Obtenir le plus grand nombre de 4","Somme des dés ayant obtenu 4",0,0);
-  public static Challenge nombreDe5 = new Challenge("Nombre de 5","Obtenir le plus grand nombre de 5","Somme des dés ayant obtenu 5",0,0);
-  public static Challenge nombreDe6 = new Challenge("Nombre de 6","Obtenir le plus grand nombre de 6","Somme des dés ayant obtenu 6",0,0);
-  public static Challenge brelan = new Challenge("Brelan","Obtenir 3 dés de même valeur","Somme des 3 dés identiques",0,0);
-  public static Challenge carre = new Challenge("Carré","Obtenir 4 dés de même valeur","Somme des 4 dés identiques",0,0);
-  public static Challenge full = new Challenge("Full","Obtenir 3 dés de même valeur + 2 dés de même valeur","25 points",0,0);
-  public static Challenge petiteSuite = new Challenge("Petite Suite","Obtenir 1-2-3-4 ou 2-3-4-5 ou 3-4-5-6","30 points",0,0);
-  public static Challenge grandeSuite = new Challenge("Grande Suite","Obtenir 1-2-3-4-5 ou 2-3-4-5-6","40 points",0,0);
-  public static Challenge yams = new Challenge("yams","Obtenir 5 dés de même valeur","50 points",0,0);
-  public static Challenge chance = new Challenge("Chance","Obtenir le maximum de points","Somme des dés obtenus",0,0);
+  public static Challenge nombreDe1 = new Challenge("Nombre de 1","Obtenir le plus grand nombre de 1","Somme des dés ayant obtenu 1");
+  public static Challenge nombreDe2 = new Challenge("Nombre de 2","Obtenir le plus grand nombre de 2","Somme des dés ayant obtenu 2");
+  public static Challenge nombreDe3 = new Challenge("Nombre de 3","Obtenir le plus grand nombre de 3","Somme des dés ayant obtenu 3");
+  public static Challenge nombreDe4 = new Challenge("Nombre de 4","Obtenir le plus grand nombre de 4","Somme des dés ayant obtenu 4");
+  public static Challenge nombreDe5 = new Challenge("Nombre de 5","Obtenir le plus grand nombre de 5","Somme des dés ayant obtenu 5");
+  public static Challenge nombreDe6 = new Challenge("Nombre de 6","Obtenir le plus grand nombre de 6","Somme des dés ayant obtenu 6");
+  public static Challenge brelan = new Challenge("Brelan","Obtenir 3 dés de même valeur","Somme des 3 dés identiques");
+  public static Challenge carre = new Challenge("Carré","Obtenir 4 dés de même valeur","Somme des 4 dés identiques");
+  public static Challenge full = new Challenge("Full","Obtenir 3 dés de même valeur + 2 dés de même valeur","25 points");
+  public static Challenge petiteSuite = new Challenge("Petite Suite","Obtenir 1-2-3-4 ou 2-3-4-5 ou 3-4-5-6","30 points");
+  public static Challenge grandeSuite = new Challenge("Grande Suite","Obtenir 1-2-3-4-5 ou 2-3-4-5-6","40 points");
+  public static Challenge yams = new Challenge("yams","Obtenir 5 dés de même valeur","50 points");
+  public static Challenge chance = new Challenge("Chance","Obtenir le maximum de points","Somme des dés obtenus");
 
   // on met les challenges dans un tableau challenges, les [0-5] sont pour les challenges mineurs, les [6-12] pour les majeurs.
   public static Challenge[] challenges = new Challenge[13] {nombreDe1,nombreDe2,nombreDe3,nombreDe4,nombreDe5,nombreDe6,brelan,carre,full,petiteSuite,grandeSuite,yams,chance};
@@ -88,11 +84,11 @@ public static partial class Yams {
     }
   }
 
-  // fonction du tour, tour est le numero du tour (indexé à 0), on l'utilise pour attribuer correctement les des et les scores à chaque jouer et noter a quel tour chaque challenge est utilisé
-  static void tour (int tour, ref Player currentPlayer) {
+  // numTour indexé à 0, on l'utilise pour attribuer correctement les des et les scores à chaque jouer et noter a quel tour chaque challenge est utilisé
+  static void tour (int numTour, ref Player currentPlayer) {
 
     Console.WriteLine();
-    Console.WriteLine($"Debut du tour {tour+1} de {currentPlayer.pseudo}.");   // on utilise tour+1 car tour est indexé à 0 mais ici l'information est destiné au joueur humain, donc on indexe à 1. 
+    Console.WriteLine($"Debut du tour {numTour+1} de {currentPlayer.pseudo}.");   // numTour+1 car numTour indexé à 0 mais ici info destinée au joueur index à 1. 
 
     // affichage des challenges restant pour le joueur
     challengesRestants( ref currentPlayer);
@@ -106,18 +102,18 @@ public static partial class Yams {
     lancerDes(ref dices, line, ref relance);
 
     // on monte d'un niveau dans le tableau des dés
-    line++;
     
     // on relance les des jusqu'a 2 fois si le joueur decide de relancer certain dés
-    for (int i = 0 ; i < 2 ; i ++ ) {
+    for (int i = 0 ; i < 2 ; i++ ) {
       if ( relance ) {
-        lancerDes(ref dices, line+i, ref relance);
+        line++;
+        lancerDes(ref dices, line, ref relance);
       }
     }
 
     // on enregistre les des finaux dans la structure du joueur
     for (int i = 0 ; i < 5 ; i++ ) {
-      currentPlayer.dices[tour,i] = dices[line,i];
+      currentPlayer.dices[numTour,i] = dices[line,i];
     }
 
     challengesRestants( ref currentPlayer);
@@ -128,7 +124,7 @@ public static partial class Yams {
 
     // on verifie si le challenge est encore jouable
     while ( validiteChoix == false ) {
-      Console.Write("Quel challenge souhaitez-vous jouer ? : ");
+      Console.Write("Quel challenge souhaitez-vous jouer ? (entrez 0 pour voir la liste des challenges) : ");
       
       if ( !int.TryParse(Console.ReadLine(), out choix) ) 
       {
@@ -141,6 +137,7 @@ public static partial class Yams {
 
       if ( choix == -1 ) 
       {
+        Console.WriteLine("Challenge       | Objectif                                            | Points");
         for ( int i = 0 ; i < 13 ; i++ ) {
           if ( currentPlayer.challRestants[i] ) {
             Console.WriteLine(challenges[i].ToString());
@@ -152,7 +149,7 @@ public static partial class Yams {
       {
         validiteChoix = true;
         currentPlayer.challRestants[choix] = false;
-        currentPlayer.challTour[tour] = choix;
+        currentPlayer.challTour[numTour] = choix;
       } 
       else 
       {
@@ -161,9 +158,11 @@ public static partial class Yams {
     }
 
     // on calcule le score
-    calcScore(choix, tour, ref currentPlayer);
-    Console.WriteLine($"Vous avez choisis le challenge {challenges[choix].challenge}, ce qui vous apporte {currentPlayer.scoreRounds[tour]}, pour un score total actuellement de {currentPlayer.scoreTotal}.");
+    calcScore(choix, numTour, ref currentPlayer);
+    Console.WriteLine($"Vous avez choisis le challenge {challenges[choix].challenge}, ce qui vous apporte {currentPlayer.scoreTour[numTour]}, pour un score total actuellement de {currentPlayer.scoreTotal}.");
     
+    
+
     Console.WriteLine($"Fin du tour, appuyer sur une entrée pour continuer.");
     Console.ReadLine();
     Console.WriteLine();
@@ -199,44 +198,33 @@ public static partial class Yams {
 
 
     if ( line < 3 ) {
-      Console.Write($"Voici vos dés modifiables : ");
-      for (int i = 0 ; i < 5 ; i++ ) {
-        if ( dices[line-1,i] == 0 ) {
-          Console.Write($"{dices[line,i]}. ");
-        }
-      }
-      Console.WriteLine();
-
       // choix du joueur
       for ( int i = 0 ; i < 5 ; i++ ) {
-
-        if ( dices[line-1,i] == 0 ) {
-          Console.Write($"Souhaitez-vous garder le dé n{i+1} : {dices[line,i]} ? y/*. ");
-          if ( 'y' == Console.ReadKey().KeyChar ) {
-            dices[line+1,i] = dices[line,i];
-          } else {
-            dices[line,i] = 0;
-            relance = true;
-          }
-          Console.WriteLine();
-        } else {
+        Console.Write($"Souhaitez-vous garder le dé n{i+1} : {dices[line,i]} ? y/*. ");
+        if ( 'y' == Console.ReadKey().KeyChar ) {
           dices[line+1,i] = dices[line,i];
+        } else {
+          dices[line,i] = 0;
+          relance = true;
         }
+        Console.WriteLine();
       }
-      Console.WriteLine();
     }
     Console.WriteLine();
   }
 
-
-  public static void calcScore( int choix, int tour, ref Player currentPlayer) {
+  public static void calcScore( int choix, int numTour, ref Player currentPlayer) {
     
     int score = 0;
 
+    for (int i = 0 ; i < 5 ; i++) {
+      Console.Write(currentPlayer.dices[numTour,i]);
+    }
+
+
     if ( choix < 6 ) {
       for ( int i = 0 ; i < 5 ; i++ ) {
-        Console.WriteLine($"{tour} ; {i} ; {choix}");
-        if ( currentPlayer.dices[tour,i] == choix+1 ) {
+        if ( currentPlayer.dices[numTour,i] == choix+1 ) {
           score += choix+1;
         }
       }
@@ -248,7 +236,7 @@ public static partial class Yams {
           for (int i = 1 ; i <= 6 ; i++) {   // pour chaque valeur possible du dé
             int compteur = 0;
             for (int j = 0 ; j < 5 ; j++) {       // Compter le nombre de fois la valeur apparait
-              if (currentPlayer.dices[tour,j] == i) {
+              if (currentPlayer.dices[numTour,j] == i) {
                 compteur++;
               }
             }
@@ -263,7 +251,7 @@ public static partial class Yams {
           for (int i = 1 ; i <= 6 ; i++) {   // pour chaque valeur possible du dé
             int compteur = 0;
             for (int j = 0; j < 5; j++) {       // Compter le nombre de fois la valeur apparait
-              if (currentPlayer.dices[tour,j] == i) {
+              if (currentPlayer.dices[numTour,j] == i) {
                 compteur++;
               }
             }
@@ -281,7 +269,7 @@ public static partial class Yams {
           for (int i = 1; i <= 6; i++) {
             int compteur = 0;
             for (int j = 0; j < 5; j++) {
-              if (currentPlayer.dices[tour,j] == i) {
+              if (currentPlayer.dices[numTour,j] == i) {
                 compteur++;
               }
             }
@@ -300,22 +288,22 @@ public static partial class Yams {
           trois = false;
 
           for (int i = 0; i < 5; i++) {
-            if (currentPlayer.dices[tour,i] == 1) {
+            if (currentPlayer.dices[numTour,i] == 1) {
               un = true;
             }
-            if (currentPlayer.dices[tour,i] == 2) {
+            if (currentPlayer.dices[numTour,i] == 2) {
               deux = true;
             }
-            if (currentPlayer.dices[tour,i] == 3) {
+            if (currentPlayer.dices[numTour,i] == 3) {
               trois = true;
             }
-            if (currentPlayer.dices[tour,i] == 4) {
+            if (currentPlayer.dices[numTour,i] == 4) {
               quatre = true;
             }
-            if (currentPlayer.dices[tour,i] == 5) {
+            if (currentPlayer.dices[numTour,i] == 5) {
               cinq = true;
             }
-            if (currentPlayer.dices[tour,i] == 6) {
+            if (currentPlayer.dices[numTour,i] == 6) {
               six = true;
             }
           }
@@ -334,22 +322,22 @@ public static partial class Yams {
           six = false;
 
           for (int i = 0; i < 5; i++) {
-            if (currentPlayer.dices[tour,i] == 1) {
+            if (currentPlayer.dices[numTour,i] == 1) {
               un = true;
             }
-            if (currentPlayer.dices[tour,i] == 2) {
+            if (currentPlayer.dices[numTour,i] == 2) {
               deux = true;
             }
-            if (currentPlayer.dices[tour,i] == 3) {
+            if (currentPlayer.dices[numTour,i] == 3) {
               trois = true;
             }
-            if (currentPlayer.dices[tour,i] == 4) {
+            if (currentPlayer.dices[numTour,i] == 4) {
               quatre = true;
             }
-            if (currentPlayer.dices[tour,i] == 5) {
+            if (currentPlayer.dices[numTour,i] == 5) {
               cinq = true;
             }
-            if (currentPlayer.dices[tour,i] == 6) {
+            if (currentPlayer.dices[numTour,i] == 6) {
               six = true;
             }
           }
@@ -362,9 +350,9 @@ public static partial class Yams {
         case 11:
           int tmp = 50;
 
-          int d = currentPlayer.dices[tour,0];
+          int d = currentPlayer.dices[numTour,0];
           for (int i = 1 ; i < 5 ; i++) {
-            if ( d != currentPlayer.dices[tour,i] ) {
+            if ( d != currentPlayer.dices[numTour,i] ) {
               tmp = 0;
             }
           }
@@ -375,7 +363,7 @@ public static partial class Yams {
         case 12:
           tmp = 0;
           for ( int i = 0 ; i < 5 ; i++ ) {
-            tmp += currentPlayer.dices[tour,i];
+            tmp += currentPlayer.dices[numTour,i];
           }
           score = tmp;
           break;
@@ -384,8 +372,29 @@ public static partial class Yams {
           break;
       } 
     }
-    currentPlayer.scoreRounds[tour] = score;
+    currentPlayer.scoreTour[numTour] = score;
     currentPlayer.scoreTotal += score;
+  }
+
+
+  public static void CalculerBonus(ref Player currentPlayer) {
+    int somme = 0;  // somme des scores
+
+    // on additionne les scores des 6 premiers challenges (mineurs)
+    for ( int i = 0 ; i < 13 ; i++ ) {
+      if ( currentPlayer.challTour[i] < 6 ) {
+        somme += currentPlayer.scoreTour[i];
+      }
+    }
+
+    // tout les 63 points, on attribue le bonus
+    if (somme >= 63) {
+      currentPlayer.bonus = 35;
+    } 
+    else {
+      currentPlayer.bonus = 0;
+    }
+    currentPlayer.scoreTotal += currentPlayer.bonus;
   }
 }
 
