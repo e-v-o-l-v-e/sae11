@@ -38,7 +38,7 @@ public static partial class Yams {
     }
     
     public override string ToString() {
-      return $"{challenge.PadRight(15)} | {objectif.PadRight(52)}| {nombreDePoints.PadRight(20)}";
+      return $"| {challenge.PadRight(15)} | {objectif.PadRight(52)}| {nombreDePoints.PadRight(30)} |";
     }
 
   }
@@ -147,12 +147,15 @@ public static partial class Yams {
 
       if ( choix == -1 ) 
       {
-        Console.WriteLine("Challenge       | Objectif                                            | Points");
+        Console.WriteLine("----------------------------------------------------------------------------------------------------------");
+        Console.WriteLine("| CHALLENGE       | OBJECTIF                                            | POINTS                         |");
         for ( int i = 0 ; i < 13 ; i++ ) {
           if ( currentPlayer.challRestants[i] ) {
+            Console.WriteLine("|-----------------|-----------------------------------------------------|--------------------------------|");
             Console.WriteLine(challenges[i].ToString());
           }
         }
+        Console.WriteLine("----------------------------------------------------------------------------------------------------------");
         Console.WriteLine();
       } 
       else if ( choix >= -1 && choix < 13 && currentPlayer.challRestants[choix] ) 
