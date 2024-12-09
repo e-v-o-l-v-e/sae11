@@ -98,77 +98,21 @@ function affichageGlobal(){
     //Les joueurs
     afficherJoueurs();
     
-    //Les tours
-    
-    
-    // Fonction asynchrone pour gérer l'asynchronicité des fetch()
-    async function fetchRounds() {
-        for(let i=1; i<14; i++){
-            try{
-                const response = await fetch("http://yams.iutrs.unistra.fr:3000/api/games/" + nomFichier + "/rounds/" + i)
-                const data = await response.json();
-                
-                let codeHTML = `
-                    <h4> Tour ${data.id} </h4>
-                    <h5> Joueur 1 </h5>
-                    <h6> Dés </h6>
-                `;
-                
-                for(let j=0; j<5; j++){
-                    codeHTML += `<p>${data.results[0].dice[j]}</p>`;
-                }
-
-                codeHTML += `
-                    <p>Challenge choisi : ${data.results[0].challenge}</p>
-                    <p>Score du tour : ${data.results[0].score}</p>
-                `;
-
-                
-                // Joueur 2
-                codeHTML += `
-                    <h5> Joueur 2 </h5>
-                    <h6> Dés </h6>
-                `;
-                
-                for(let j=0; j<5; j++){
-                    codeHTML += `<p>${data.results[1].dice[j]}</p>`;
-                }
-
-                codeHTML += `
-                    <p>Challenge choisi : ${data.results[1].challenge}</p>
-                    <p>Score du tour : ${data.results[1].score}</p>
-                `;
-
-                contenantTours.innerHTML += codeHTML;
-                
-            } 
-            catch (error) {
-                console.error('Erreur de chargement du fichier', error);
-            }
-        }
-    }
-    
-    // Appel de la fonction asynchrone
-    codeHTML = `
-        <h3>Les tours</h3>
-    `;
-    contenantTours.innerHTML += codeHTML;
-    fetchRounds();
-    
     //Résultats finaux
     afficherResultatsFinaux();
 }   
 
 
 function afficheTour(tour){
-    fetch("http://yams.iutrs.unistra.fr:3000/api/games/" + nomFichier + "/tour/" + tour)
+    fetch("http://yams.iutrs.unistra.fr:3000/api/games/" + nomFichier + "/rounds/" + tour)
         .then(response => response.json())
-        .then(data => {
+        .then(data => {            
             let codeHTML = `
-                <h4> Tour ${data.id} </h4>
-                <h5> Joueur 1 </h5>
-                <h6> Dés </h6>
+                <h2> Tour ${data.id} </h4>
+                <h3> Joueur 1 </h5>
+                <h4> Dés </h6>
             `;
+            
             
             for(let j=0; j<5; j++){
                 codeHTML += `<p>${data.results[0].dice[j]}</p>`;
@@ -182,8 +126,8 @@ function afficheTour(tour){
             
             // Joueur 2
             codeHTML += `
-                <h5> Joueur 2 </h5>
-                <h6> Dés </h6>
+                <h3> Joueur 2 </h5>
+                <h4> Dés </h6>
             `;
             
             for(let j=0; j<5; j++){
@@ -203,18 +147,41 @@ function afficheTour(tour){
 
 function affichageTourParTour(){
     //Rajouter les boutons (changer de tour)
-    codeHTML = `
-        <input type='submit' value='TourPrecedent'>
-        <input type='submit' value='TourSuivant'>
-    `;
-    contenantBouton.innerHTML = codeHTML;
+    let boutonPrecedent = document.createElement("button")  
+    boutonPrecedent.innerHTML='Tour précédent'
+    boutonPrecedent.setAttribute('id', "precedent")
     
+    let boutonSuivant = document.createElement('button')
+    boutonSuivant.innerHTML = 'Tour suivant'
+    boutonSuivant.setAttribute('id', "suivant")
+
+    contenantBouton.appendChild(boutonPrecedent)
+    contenantBouton.appendChild(boutonSuivant)
     
     //Afficher les tours
     let i = 1;
     afficheTour(i);
-
     
+    document.getElementById('precedent').addEventListener('click', function(){
+        if(i > 1){
+            i--;
+            afficheTour(i);
+        } 
+        else{
+            i = 13;
+            afficheTour(i);
+        }
+    });
+    document.getElementById('suivant').addEventListener('click', function(){
+        if(i<13){
+            i++;
+            afficheTour(i);
+        }
+        else{
+            i = 1;
+            afficheTour(i);
+        }
+    });
     //Afficher les résultats finaux
     afficherResultatsFinaux();
 }
