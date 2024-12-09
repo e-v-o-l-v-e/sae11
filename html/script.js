@@ -40,10 +40,8 @@ function afficherParametres(){
     fetch("http://yams.iutrs.unistra.fr:3000/api/games/" + nomFichier + "/parameters")
         .then(response => response.json())
         .then(data => {
-            codeHTML = `
-                <h2>Partie ${nomFichier}</h2>
-                
-                <h3>Paramètres de la partie</h3>
+            codeHTML = `                
+                <h2>Paramètres de la partie</h2>
                 <p>Code_Partie : ${data.code}</p>
                 <p>Date_Partie : ${data.date}</p><br>
             `;
@@ -57,16 +55,26 @@ function afficherJoueurs(){
         .then(response => response.json())
         .then(data =>{
             codeHTML = `
-                <h3>Les joueurs</h3>
-                <p>ID_Joueur : ${data[0].id}</p>
-                <p>Pseudo_Joueur : ${data[0].pseudo}</p>
-                <br>
-                
-                <p>ID_Joueur : ${data[1].id}</p>
-                <p>Pseudo_Joueur : ${data[1].pseudo}</p>
+                <h2>Les joueurs</h2>
+                <table>
+                    <tr>
+                        <th>ID</th>
+                        <th>Pseudo</th>
+                    </tr>
+                    
+                    <tr>
+                        <td>${data[0].id}</td>
+                        <td>${data[0].pseudo}</td>
+                    </tr>
+                    
+                    <tr>
+                        <td>${data[1].id}</td>
+                        <td>${data[1].pseudo}</td>
+                    </tr>
+                </table>
                 <br>
             `;
-            contenantJoueurs.innerHTML += codeHTML;
+            contenantJoueurs.innerHTML = codeHTML;
         })
         .catch(error => console.error('Erreur de chargement du fichier', error));
 }
@@ -76,15 +84,27 @@ function afficherResultatsFinaux(){
         .then(response => response.json())
         .then(data =>{
             codeHTML = `
-                <h3>Scores finaux</h3>
-                <p>ID_Joueur : ${data[0].id_player}</p>
-                <p>Bonus_Joueur : ${data[0].bonus}</p>
-                <p>Score_Joueur : ${data[0].score}</p>
+                <h2>Scores finaux</h2>
+                <table>
+                    <tr>
+                        <th>ID</th>
+                        <th>Bonus</th>
+                        <th>Score</th>
+                    </tr>
+                    
+                    <tr>
+                        <td>${data[0].id_player}</td>
+                        <td>${data[0].bonus}</td>
+                        <td>${data[0].score}</td>
+                    </tr>
+                    
+                    <tr>
+                        <td>${data[1].id_player}</td>
+                        <td>${data[1].bonus}</td>
+                        <td>${data[1].score}</td>
+                    </tr>
+                </table>
                 <br>
-                
-                <p>ID_Joueur : ${data[1].id_player}</p>
-                <p>Bonus_Joueur : ${data[1].bonus}</p>
-                <p>Score_Joueur : ${data[1].score}</p>
             `;
             contenantScoreFinal.innerHTML = codeHTML;
         })
@@ -108,17 +128,30 @@ function afficheTour(tour){
         .then(response => response.json())
         .then(data => {            
             let codeHTML = `
-                <h2> Tour ${data.id} </h4>
-                <h3> Joueur 1 </h5>
-                <h4> Dés </h6>
+                <h2> Tour ${data.id} </h2>
+                <h3> Joueur 1 </h3>
+                <h4> Dés </h4>
+                
+                <table>
+                    <tr>
+                        <th>n°1</th>
+                        <th>n°2</th>
+                        <th>n°3</th>
+                        <th>n°4</th>
+                        <th>n°5</th>
+                    </tr>
+                    
+                    <tr>
             `;
             
             
             for(let j=0; j<5; j++){
-                codeHTML += `<p>${data.results[0].dice[j]}</p>`;
+                codeHTML += `<td>${data.results[0].dice[j]}</td>`;
             }
 
             codeHTML += `
+                </tr>
+                </table>
                 <p>Challenge choisi : ${data.results[0].challenge}</p>
                 <p>Score du tour : ${data.results[0].score}</p>
             `;
@@ -127,14 +160,26 @@ function afficheTour(tour){
             // Joueur 2
             codeHTML += `
                 <h3> Joueur 2 </h5>
-                <h4> Dés </h6>
+                <h4> Dés </h4>
+                <table>
+                    <tr>
+                        <th>n°1</th>
+                        <th>n°2</th>
+                        <th>n°3</th>
+                        <th>n°4</th>
+                        <th>n°5</th>
+                    </tr>
+                    
+                    <tr>
             `;
             
             for(let j=0; j<5; j++){
-                codeHTML += `<p>${data.results[1].dice[j]}</p>`;
+                codeHTML += `<td>${data.results[1].dice[j]}</td>`;
             }
 
             codeHTML += `
+                </tr>
+                </table>
                 <p>Challenge choisi : ${data.results[1].challenge}</p>
                 <p>Score du tour : ${data.results[1].score}</p>
             `;
