@@ -99,6 +99,7 @@ public static partial class Yams {
 
     Console.WriteLine();
     Console.WriteLine($"Debut du tour {numTour+1} de {currentPlayer.pseudo}.");   // numTour+1 car numTour indexé à 0 mais ici info destinée au joueur index à 1. 
+    Console.WriteLine();
 
     // affichage des challenges restant pour le joueur
     challengesRestants( ref currentPlayer);
@@ -195,6 +196,7 @@ public static partial class Yams {
         Console.WriteLine($" - { challenges[i].challenge}");
       }
     }
+    Console.WriteLine();
   }
 
 
