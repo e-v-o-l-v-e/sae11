@@ -3,8 +3,8 @@
 /*-------------------*/
 
 html {
-    background-color: #E1D7B7;
-    color: #1E2A5E;
+    background-color: white;
+    color: black;
     font-size: 16px;
 }
 
@@ -23,9 +23,14 @@ header {
 
 h1 {
     text-align: center;
+    color: #1E2A5E;
 }
 
 /* FORM */
+legend {
+    color: navy;
+}
+
 .selection {
     color: #55679C;
     margin: 0.75rem;
@@ -34,7 +39,7 @@ h1 {
     align-items: left;
 }
 
-.id {
+.nom {
     margin: 0.5rem;
 }
 
@@ -45,3 +50,15 @@ h1 {
 .bouton {
     font-size: 1rem:
 }
+
+
+/*  Couleurs
+
+#7C93C3     Bleu très clair
+#55679C     Bleu milieu
+#1E2A5E     Bleu très foncé
+#E1D7B7     Beige
+#4169E1     Bleu roi
+navy        Bleu marine
+
+*/
