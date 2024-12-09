@@ -8,22 +8,25 @@
 
   <body>
     <header>
-      <img src="images/des.png"></img>
+      <img src="images/des.png">
       <h1>Le glossaire des parties</h1>
-      <form>
+      <form id='formulaire'>
       
         <fieldset>
           <legend>Quelle partie voulez-vous consulter ?</legend>
           
           <div class="selection">
             <div class="nom">
-                <label for="nom_partie">Nom partie</label>
-                <input id="nom_partie" name="nom" type="text">
+                <label for="nomPartie">Nom partie</label>
+                <input id="nomPartie" name="nom" type="text">
                 <br/>
             </div>
             
             <div class="consultation">
+            <!--
                 <label for="partie">Consulter le fichier Json</label>
+            -->
+                Consulter le fichier Json
                 
                 <input type="radio" id="tour" name="partie" value="tour">
                 <label for="tour">Afficher un tour</label>
@@ -33,7 +36,7 @@
                 <br/>
             </div>
             <div id="bouton">
-                <input type="submit" value="Valider">
+                <input type='submit' value='Valider'>
             </div>
         </div>
           
@@ -42,13 +45,11 @@
     </header>
 
     <main>
-        <div id='partieComplete'>
-        
-        </div>
-        
-        <div id='partieReduite'>
-        
-        </div>
+        <div id='boutonTour'></div>
+        <div id='contenuParametres'></div>
+        <div id='contenuJoueurs'></div>
+        <div id='contenuTours'></div>
+        <div id='contenuScoreFinal'></div>
       
     </main>
 
