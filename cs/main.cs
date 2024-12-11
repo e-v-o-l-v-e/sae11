@@ -8,7 +8,7 @@ public static partial class Yams {
     public int id;               // id du joueur, 1 ou 2 etant donnée que le nombre max de jouer est 2
     public string pseudo;        // pseudo du joueur
     public int[,] dices;         // on va stocker tous les des finaux de chaque rounds
-    public bool[] challRestants;     // les challenges encore utilisable par le joueur
+    public bool[] challRestants;     // les challenges encore utilisable par le joueur"▶",
     public int[] challTour;
     public int[] scoreTour;   // les scores de chaque round
     public int bonus;
@@ -99,6 +99,7 @@ public static partial class Yams {
 
     Console.WriteLine();
     Console.WriteLine($"Debut du tour {numTour+1} de {currentPlayer.pseudo}.");   // numTour+1 car numTour indexé à 0 mais ici info destinée au joueur index à 1. 
+    Console.WriteLine();
 
     // affichage des challenges restant pour le joueur
     challengesRestants( ref currentPlayer);
@@ -157,6 +158,11 @@ public static partial class Yams {
         }
         Console.WriteLine("----------------------------------------------------------------------------------------------------------");
         Console.WriteLine();
+        Console.Write($"(Rappel de vos dés : ");
+    for (int i = 0 ; i < 5 ; i++ ) {
+      Console.Write($"{dices[line,i]}. ");
+    }
+    Console.WriteLine(")\n");
       } 
       else if ( choix >= -1 && choix < 13 && currentPlayer.challRestants[choix] ) 
       {
@@ -172,9 +178,9 @@ public static partial class Yams {
 
     // on calcule le score
     calcScore(choix, numTour, ref currentPlayer);
-    Console.WriteLine($"Vous avez choisis le challenge {challenges[choix].challenge}, ce qui vous apporte {currentPlayer.scoreTour[numTour]}, pour un score total actuellement de {currentPlayer.scoreTotal}.");
+    Console.WriteLine($"Vous avez choisis le challenge {challenges[choix].challenge}, cela vous rapporte {currentPlayer.scoreTour[numTour]} points, pour un score total de {currentPlayer.scoreTotal} points. ");
     
-    Console.WriteLine($"Fin du tour, appuyer sur une entrée pour continuer.");
+    Console.WriteLine($"Le tour est finis, appuyez sur une entrée pour continuer.");
     Console.ReadLine();
     Console.WriteLine();
   }
@@ -182,11 +188,15 @@ public static partial class Yams {
 
   // on verifie les challenges pas encore utilisés par le jouer pour les lui afficher
   public static void challengesRestants(ref Player currentPlayer){
+    Console.WriteLine("Voici les challenges qui n'ont pas encore été joués : ");
     for (int i = 0; i < 13; i++) {
       if (currentPlayer.challRestants[i] ) {
-        Console.WriteLine($"{i+1} - { challenges[i].challenge}");
+        /*Console.Write("{0, 2}", i+1);*/
+        Console.Write("{0:00}", i+1);
+        Console.WriteLine($" - { challenges[i].challenge}");
       }
     }
+    Console.WriteLine();
   }
 
 
@@ -206,6 +216,7 @@ public static partial class Yams {
       Console.Write($"{dices[line,i]}. ");
     }
     Console.WriteLine();
+    afficheDes(dices, line);
 
 
     if ( line < 3 ) {
@@ -228,10 +239,10 @@ public static partial class Yams {
     
     int score = 0;
 
-    for (int i = 0 ; i < 5 ; i++) {
-      Console.Write(currentPlayer.dices[numTour,i]);
-    }
-
+    // debug, affiche les dés
+    /*for (int i = 0 ; i < 5 ; i++) {*/
+    /*  Console.Write(currentPlayer.dices[numTour,i]);*/
+    /*}*/
 
     if ( choix < 6 ) {
       for ( int i = 0 ; i < 5 ; i++ ) {
@@ -498,5 +509,134 @@ public static partial class Yams {
   }
 
 
+
+
+  // les trucs useless mais stylés
+  public static void afficheDes (int[,] dices, int line) {
+  
+    for (int i = 0 ; i < 5 ; i++) {
+      Console.Write("  -------  ");
+    }
+    Console.WriteLine();
+
+    for (int i = 0 ; i < 5 ; i++) {
+      switch (dices[line,i]) {
+        case 1: 
+          Console.Write(" |       | ");
+          break;
+        case 2: 
+          Console.Write(" | 2     | ");
+          break;
+        case 3: 
+          Console.Write(" | 3     | ");
+          break;
+        case 4: 
+          Console.Write(" | 4   4 | ");
+          break;
+        case 5: 
+          Console.Write(" | 5   5 | ");
+          break;
+        case 6: 
+          Console.Write(" | 6   6 | ");
+          break;
+      }
+    }
+    Console.WriteLine();
+    for (int i = 0 ; i < 5 ; i++) {
+      switch (dices[line,i]) {
+        case 1: 
+          Console.Write(" |   1   | ");
+          break;
+        case 2: 
+          Console.Write(" |       | ");
+          break;
+        case 3: 
+          Console.Write(" |   3   | ");
+          break;
+        case 4: 
+          Console.Write(" |       | ");
+          break;
+        case 5: 
+          Console.Write(" |   5   | ");
+          break;
+        case 6: 
+          Console.Write(" | 6   6 | ");
+          break;
+      }
+    }
+    Console.WriteLine();
+    for (int i = 0 ; i < 5 ; i++) {
+      switch (dices[line,i]) {
+        case 1: 
+          Console.Write(" |       | ");
+          break;
+        case 2: 
+          Console.Write(" |     2 | ");
+          break;
+        case 3: 
+          Console.Write(" |     3 | ");
+          break;
+        case 4: 
+          Console.Write(" | 4   4 | ");
+          break;
+        case 5: 
+          Console.Write(" | 5   5 | ");
+          break;
+        case 6: 
+          Console.Write(" | 6   6 | ");
+          break;
+      }
+    }
+    Console.WriteLine();
+    for (int i = 0 ; i < 5 ; i++) {
+      Console.Write("  -------  ");
+    }
+    Console.WriteLine();
+    }
+
+
+  // Des
+  /*  Console.WriteLine(@"*/
+  /*     -------*/
+  /*    |       |*/
+  /*    |   1   |*/
+  /*    |       |*/
+  /*     -------*/
+  /**/
+  /*     -------*/
+  /*    | 2     |*/
+  /*    |       |*/
+  /*    |     2 |*/
+  /*     -------*/
+  /**/
+  /*     -------*/
+  /*    | 3     |*/
+  /*    |   3   |*/
+  /*    |     3 |*/
+  /*     -------*/
+  /**/
+  /*     -------*/
+  /*    | 4   4 |*/
+  /*    |       |*/
+  /*    | 4   4 |*/
+  /*     -------*/
+  /**/
+  /*     -------*/
+  /*    | 5   5 |*/
+  /*    |   5   |*/
+  /*    | 5   5 |*/
+  /*     -------*/
+  /**/
+  /*     -------*/
+  /*    | 6   6 |*/
+  /*    | 6   6 |*/
+  /*    | 6   6 |*/
+  /*     -------*/
+  /*    ");*/
+  /*}*/
+
+
 }
+
+
 
