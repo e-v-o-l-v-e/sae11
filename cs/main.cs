@@ -207,7 +207,7 @@ public static partial class Yams {
       
     for (int i = 0 ; i <  5 ; i++) {
       if ( dices[line,i] == 0 ) {
-        dices[line,i] = rnd.Next(1,6);
+        dices[line,i] = rnd.Next(1,7);
       }
     }
 
@@ -401,21 +401,16 @@ public static partial class Yams {
 
   public static void calcBonus(ref Player currentPlayer) {
     int somme = 0;  // somme des scores
-
+    currentPlayer.bonus = 0;
     // on additionne les scores des 6 premiers challenges (mineurs)
     for ( int i = 0 ; i < 13 ; i++ ) {
       if ( currentPlayer.challTour[i] < 6 ) {
         somme += currentPlayer.scoreTour[i];
       }
     }
-
-    // tout les 63 points, on attribue le bonus
     if (somme >= 63) {
       currentPlayer.bonus = 35;
     } 
-    else {
-      currentPlayer.bonus = 0;
-    }
     currentPlayer.scoreTotal += currentPlayer.bonus;
   }
 
