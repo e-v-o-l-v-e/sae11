@@ -1,3 +1,4 @@
 # ignore .exe file
 *.exe
+*res.json
 
