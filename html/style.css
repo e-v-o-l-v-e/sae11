@@ -198,10 +198,6 @@ tr:nth-child(even) {    /* Que pour les lignes paires */
     background-color: #f8e0b5;
 }
 
-tr:hover {
-    background-color: #f5c89d;
-}
-
 button {
     display: inline-block;
     background-color: #a72f2f;
@@ -279,7 +275,7 @@ button:hover {
     cursor: pointer;
     border-radius: 5px;
     transition: background-color 0.3s ease;
-}
+}   
 
 #boutonsContainer button:hover {
     background-color: #882626;
@@ -289,4 +285,24 @@ button:hover {
     flex-grow: 1; 
     text-align: center;
     padding: 0 20px;
+}
+
+#AfficheJoueur {
+    display: flex;
+    justify-content: space-around; 
+    align-items: center; 
+    padding: 20px;
+    margin-top: 20px; 
+}
+
+#J1, #J2 {
+    font-size: 1.2rem; 
+    font-weight: bold;
+    padding: 10px 20px; 
+    background-color: #fdf5ea; 
+    color: white; 
+    border-radius: 8px; 
+    box-shadow: 0 2px 10px black; 
+    width: 40%; 
+    text-align: center; 
 }
