@@ -7,11 +7,13 @@ let codeHTML;
 document.getElementById('formulaire').addEventListener('submit', nomFichier_choixAffichage);
 const contenantParametres = document.getElementById('contenuParametres');
 const contenantJoueurs = document.getElementById('contenuJoueurs');
-const contenantTours = document.getElementById('contenuTours');
+const contenantNumTour = document.getElementById('numeroTour');
 const contenantScoreFinal = document.getElementById('contenuScoreFinal');
 const contenantBoutonPrecedent = document.getElementById('boutonPrecedent');
 const contenantBoutonPre = document.getElementById('boutonPre');
 const contenantBoutonSui = document.getElementById('boutonSui');
+const contenantTourJ1 = document.getElementById('J1');
+const contenantTourJ2 = document.getElementById('J2');
 
 
 function nomFichier_choixAffichage(event){
@@ -128,8 +130,10 @@ function afficheTour(tour){
     fetch("http://yams.iutrs.unistra.fr:3000/api/games/" + nomFichier + "/rounds/" + tour)
         .then(response => response.json())
         .then(data => {            
-            let codeHTML = `
-                <h2> Tour ${data.id} </h2>
+            let codeHTML = `<h2> Tour ${data.id} </h2>`;
+            contenantNumTour.innerHTML = codeHTML;
+                
+            let codeJ1 = `
                 <h3> Joueur 1 </h3>
                 <h4> Dés </h4>
                 
@@ -147,10 +151,10 @@ function afficheTour(tour){
             
             
             for(let j=0; j<5; j++){
-                codeHTML += `<td>${data.results[0].dice[j]}</td>`;
+                codeJ1 += `<td>${data.results[0].dice[j]}</td>`;
             }
 
-            codeHTML += `
+            codeJ1 += `
                 </tr>
                 </table>
                 <p>Challenge choisi : ${data.results[0].challenge}</p>
@@ -159,7 +163,7 @@ function afficheTour(tour){
 
             
             // Joueur 2
-            codeHTML += `
+            let codeJ2 = `
                 <h3> Joueur 2 </h5>
                 <h4> Dés </h4>
                 <table>
@@ -175,17 +179,19 @@ function afficheTour(tour){
             `;
             
             for(let j=0; j<5; j++){
-                codeHTML += `<td>${data.results[1].dice[j]}</td>`;
+                codeJ2 += `<td>${data.results[1].dice[j]}</td>`;
             }
 
-            codeHTML += `
+            codeJ2 += `
                 </tr>
                 </table>
                 <p>Challenge choisi : ${data.results[1].challenge}</p>
                 <p>Score du tour : ${data.results[1].score}</p>
             `;
 
-            contenantTours.innerHTML = codeHTML;
+            //contenantTours.innerHTML = codeHTML;
+            contenantTourJ1.innerHTML = codeJ1;
+            contenantTourJ2.innerHTML = codeJ2;
         })
         .catch(error => console.error('Erreur de chargement du fichier', error));
 }
@@ -231,13 +237,25 @@ function affichageTourParTour(){
     //Afficher les résultats finaux
     afficherResultatsFinaux();
 }
+
+
+
+
+
+
+
+
+
+
+
+
     
 let image = document.querySelector("img");
 
 image.addEventListener("click", (event) => {
   let src = image.getAttribute("src");
   if (src === "images/des.png") {
-    image.setAttribute("src", "images/yeux.jpg");
+    image.setAttribute("src", "images/yeux.png");
   } else {
     image.setAttribute("src", "images/des.png");
   }
