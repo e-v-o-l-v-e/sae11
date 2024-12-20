@@ -10,7 +10,8 @@ const contenantJoueurs = document.getElementById('contenuJoueurs');
 const contenantTours = document.getElementById('contenuTours');
 const contenantScoreFinal = document.getElementById('contenuScoreFinal');
 const contenantBoutonPrecedent = document.getElementById('boutonPrecedent');
-const contenantBouton = document.getElementById('boutonTour');
+const contenantBoutonPre = document.getElementById('boutonPre');
+const contenantBoutonSui = document.getElementById('boutonSui');
 
 
 function nomFichier_choixAffichage(event){
@@ -200,8 +201,8 @@ function affichageTourParTour(){
     boutonSuivant.innerHTML = 'Tour suivant'
     boutonSuivant.setAttribute('id', "suivant")
 
-    contenantBouton.appendChild(boutonPrecedent)
-    contenantBouton.appendChild(boutonSuivant)
+    contenantBoutonPre.appendChild(boutonPrecedent)
+    contenantBoutonSui.appendChild(boutonSuivant)
     
     //Afficher les tours
     let i = 1;
