@@ -231,13 +231,6 @@ function affichageTourParTour(){
     afficherResultatsFinaux();
 }
     
-    
-    
-    
-    
-    
-    
-
 let image = document.querySelector("img");
 
 image.addEventListener("click", (event) => {
@@ -248,3 +241,23 @@ image.addEventListener("click", (event) => {
     image.setAttribute("src", "images/des.png");
   }
 });
+
+
+const troll = document.getElementById("troll");
+
+// Fonction pour déplacer le bouton
+function deplacerBouton() {
+    const hauteurMax = window.innerHeight / 2; // Limite à la moitié de la hauteur de la fenêtre
+    const largeurMax = window.innerWidth - 100; // Largeur maximale (moins la taille du bouton)
+
+    // Calcul des nouvelles positions aléatoires
+    const nouvellePositionX = Math.random() * largeurMax;
+    const nouvellePositionY = Math.random() * hauteurMax;
+
+    // Applique les nouvelles positions
+    troll.style.left = `${nouvellePositionX}px`;
+    troll.style.top = `${nouvellePositionY}px`;
+}
+
+// Écouteur pour déplacer le bouton au survol
+troll.addEventListener("mouseover", deplacerBouton);
