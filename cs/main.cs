@@ -135,7 +135,7 @@ public static partial class Yams {
 
     // on verifie si le challenge est encore jouable
     while ( validiteChoix == false ) {
-      Console.Write("Quel challenge souhaitez-vous jouer ? (entrez 0 pour voir la liste des challenges) : ");
+      Console.Write("Quel challenge souhaitez-vous jouer ? (entrez 0 pour voir la liste des challenges, -1 pour le score actuel) : ");
 
       if ( !int.TryParse(Console.ReadLine(), out choix) ) 
       {
@@ -226,10 +226,12 @@ public static partial class Yams {
     if ( line < 3 ) {
       // choix du joueur
       for ( int i = 0 ; i < 5 ; i++ ) {
-        Console.Write($"Souhaitez-vous garder le dé n{i+1} : {dices[line,i]} ? y/*. ");
+        Console.Write($"Souhaitez-vous garder le dé numéro {i+1} qui vaut {dices[line,i]} ? y/*. ");
+        afficheUnDes(dices,line,i);
         if ( 'y' == Console.ReadKey().KeyChar ) {
           dices[line+1,i] = dices[line,i];
-        } else {
+        }
+        else {
           dices[line,i] = 0;
           relance = true;
         }
@@ -241,7 +243,7 @@ public static partial class Yams {
 
   public static void scoresActuels(ref Player currentPlayer, ref Player adversaire)
   {
-    Console.WriteLine($"{currentPlayer.pseudo} a actuellement {currentPlayer.scoreTotal} points et {adversaire.pseudo} en a {adversaire.scoreTotal}\n");
+    Console.WriteLine($"{currentPlayer.pseudo} a actuellement {currentPlayer.scoreTotal} points et {adversaire.pseudo} {adversaire.scoreTotal}\n");
   }
 
   public static void calcScore( int choix, int numTour, ref Player currentPlayer) {
@@ -596,51 +598,65 @@ public static partial class Yams {
       Console.Write("  -------  ");
     }
     Console.WriteLine();
+    Console.WriteLine();
   }
 
+  public static void afficheUnDes (int[,] dices, int line, int i) {
+    switch (dices[line,i])
+    {
+      case 1:
+        Console.WriteLine(@"
+             -------
+            |       |
+            |   1   |
+            |       |
+             -------");
+            break;
 
-  // Des
-  /*  Console.WriteLine(@"*/
-  /*     -------*/
-  /*    |       |*/
-  /*    |   1   |*/
-  /*    |       |*/
-  /*     -------*/
-  /**/
-  /*     -------*/
-  /*    | 2     |*/
-  /*    |       |*/
-  /*    |     2 |*/
-  /*     -------*/
-  /**/
-  /*     -------*/
-  /*    | 3     |*/
-  /*    |   3   |*/
-  /*    |     3 |*/
-  /*     -------*/
-  /**/
-  /*     -------*/
-  /*    | 4   4 |*/
-  /*    |       |*/
-  /*    | 4   4 |*/
-  /*     -------*/
-  /**/
-  /*     -------*/
-  /*    | 5   5 |*/
-  /*    |   5   |*/
-  /*    | 5   5 |*/
-  /*     -------*/
-  /**/
-  /*     -------*/
-  /*    | 6   6 |*/
-  /*    | 6   6 |*/
-  /*    | 6   6 |*/
-  /*     -------*/
-  /*    ");*/
-  /*}*/
+      case 2:
+        Console.WriteLine(@"
+           -------
+          | 2     |
+          |       |
+          |     2 |
+           -------");
+           break;
 
+      case 3:
+        Console.WriteLine(@"
+           -------
+          | 3     |
+          |   3   |
+          |     3 |
+           -------");
+           break;
 
+      case 4:
+        Console.WriteLine(@"
+           -------
+          | 4   4 |
+          |       |
+          | 4   4 |
+           -------");
+           break;
+
+      case 5:
+        Console.WriteLine(@"
+           -------
+          | 5   5 |
+          |   5   |
+          | 5   5 |
+           -------");
+           break;
+
+      case 6:
+        Console.WriteLine(@"
+           -------
+          | 6   6 |
+          | 6   6 |
+          | 6   6 |
+           -------");
+        break;
+    }
+  }
 }
-
-
-
