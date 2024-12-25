@@ -108,12 +108,12 @@ public static partial class Yams {
 
     Console.Clear();
 
-    // initialisation des des à 0, on met 4 lignes car on verifie si un de peut etre relancer en fonction de l'etait de la meme colonne sur la ligne precedeente, exemple : des[2,3] est relançable seulement si des[1,3] == 0
     int[,] dices = new int[4,5];
     int line = 1;
     bool relance = false;
 
-    // appel fonction principale de tour qui change les 0 en int aleatoire entre 1 et 6 pour la ligne du tour puis demande au joueur quels dés ils souhaitent garder et indique lesquels peuvent être relancé
+    status(numTour, ref currentPlayer, ref adversaire);
+    // appel fonction principale de tour qui change les 0 en int aleatoire entre 1 et 6 pour la ligne du tour puis demande au joueur quels dés ils souhaitent garder 
     lancerDes(ref dices, line, ref relance);
 
     // on monte d'un niveau dans le tableau des dés
@@ -132,6 +132,9 @@ public static partial class Yams {
     }
 
     challengesRestants( ref currentPlayer);
+
+    //tmp]
+    Console.ReadLine();
 
     int choix = -1;
     bool validiteChoix = false;
@@ -226,6 +229,8 @@ public static partial class Yams {
       }
     }
 
+
+    Console.SetCursorPosition(0,10);
     Console.Write($"Voici vos dés : ");
     for (int i = 0 ; i < 5 ; i++ ) {
       Console.Write($"{dices[line,i]}. ");
@@ -237,6 +242,7 @@ public static partial class Yams {
     if ( line < 3 ) {
       // choix du joueur
       for ( int i = 0 ; i < 5 ; i++ ) {
+        Console.SetCursorPosition(0,15);
         Console.Write($"Souhaitez-vous garder le dé numéro {i+1} qui vaut {dices[line,i]} ? y/*. ");
         afficheUnDes(dices,line,i);
         if ( 'y' == Console.ReadKey().KeyChar ) {
@@ -246,7 +252,8 @@ public static partial class Yams {
           dices[line,i] = 0;
           relance = true;
         }
-        Console.WriteLine();
+        Console.SetCursorPosition(0,24);
+        Console.Write(" ");
       }
     }
     Console.WriteLine();
@@ -612,57 +619,63 @@ public static partial class Yams {
     switch (dices[line,i])
     {
       case 1:
-        Console.WriteLine(@"
-             -------
-            |       |
-            |   1   |
-            |       |
-             -------");
-            break;
+        Console.WriteLine($"
+
+    -------
+   |       |
+   |   1   |
+   |       |
+    -------");
+          break;
 
       case 2:
-        Console.WriteLine(@"
-           -------
-          | 2     |
-          |       |
-          |     2 |
-           -------");
+        Console.WriteLine($"
+
+    -------
+   | 2     |
+   |       |
+   |     2 |
+    -------");
            break;
 
       case 3:
-        Console.WriteLine(@"
-           -------
-          | 3     |
-          |   3   |
-          |     3 |
-           -------");
+        Console.WriteLine($"
+
+    -------
+   | 3     |
+   |   3   |
+   |     3 |
+    -------");
            break;
 
       case 4:
-        Console.WriteLine(@"
-           -------
-          | 4   4 |
-          |       |
-          | 4   4 |
-           -------");
+        Console.WriteLine($"
+
+    -------
+   | 4   4 |
+   |       |
+   | 4   4 |
+    -------");
            break;
 
       case 5:
-        Console.WriteLine(@"
-           -------
-          | 5   5 |
-          |   5   |
-          | 5   5 |
-           -------");
+        Console.WriteLine($"
+
+    -------
+   | 5   5 |
+   |   5   |
+   | 5   5 |
+    -------");
            break;
 
       case 6:
-        Console.WriteLine(@"
-           -------
-          | 6   6 |
-          | 6   6 |
-          | 6   6 |
-           -------");
+        Console.WriteLine($"
+
+    -------
+   | 6   6 |
+   | 6   6 |
+   | 6   6 |
+    -------");
         break;
     }
   }
