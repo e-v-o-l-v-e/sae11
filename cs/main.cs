@@ -27,35 +27,37 @@ public static partial class Yams {
   }
 
   public struct Challenge {     // structure de création des challenges
+    public string num;
     public string challenge;
     public string objectif;
     public string nombreDePoints;
 
-    public Challenge(string challenge, string objectif, string nombreDePoints) {  // on cree la fonction createchallege pour simplifier l'attribution des differentes valeurs
+    public Challenge(string num, string challenge, string objectif, string nombreDePoints) {  // on cree la fonction createchallege pour simplifier l'attribution des differentes valeurs
+      this.num = num;
       this.challenge = challenge;
       this.objectif = objectif;
       this.nombreDePoints = nombreDePoints;
     }
 
     public override string ToString() {
-      return $"| {challenge.PadRight(15)} | {objectif.PadRight(52)}| {nombreDePoints.PadRight(30)} |";
+      return $"| {num.PadLeft(2)}  | {challenge.PadRight(15)} | {objectif.PadRight(52)}| {nombreDePoints.PadRight(30)} |";
     }
 
   }
   // on initialise tous les challenges
-  public static Challenge nombreDe1 = new Challenge("Nombre de 1","Obtenir le plus grand nombre de 1","Somme des dés ayant obtenu 1");
-  public static Challenge nombreDe2 = new Challenge("Nombre de 2","Obtenir le plus grand nombre de 2","Somme des dés ayant obtenu 2");
-  public static Challenge nombreDe3 = new Challenge("Nombre de 3","Obtenir le plus grand nombre de 3","Somme des dés ayant obtenu 3");
-  public static Challenge nombreDe4 = new Challenge("Nombre de 4","Obtenir le plus grand nombre de 4","Somme des dés ayant obtenu 4");
-  public static Challenge nombreDe5 = new Challenge("Nombre de 5","Obtenir le plus grand nombre de 5","Somme des dés ayant obtenu 5");
-  public static Challenge nombreDe6 = new Challenge("Nombre de 6","Obtenir le plus grand nombre de 6","Somme des dés ayant obtenu 6");
-  public static Challenge brelan = new Challenge("Brelan","Obtenir 3 dés de même valeur","Somme des 3 dés identiques");
-  public static Challenge carre = new Challenge("Carré","Obtenir 4 dés de même valeur","Somme des 4 dés identiques");
-  public static Challenge full = new Challenge("Full","Obtenir 3 dés de même valeur + 2 dés de même valeur","25 points");
-  public static Challenge petiteSuite = new Challenge("Petite Suite","Obtenir 1-2-3-4 ou 2-3-4-5 ou 3-4-5-6","30 points");
-  public static Challenge grandeSuite = new Challenge("Grande Suite","Obtenir 1-2-3-4-5 ou 2-3-4-5-6","40 points");
-  public static Challenge yams = new Challenge("yams","Obtenir 5 dés de même valeur","50 points");
-  public static Challenge chance = new Challenge("Chance","Obtenir le maximum de points","Somme des dés obtenus");
+  public static Challenge nombreDe1 = new Challenge("1","Nombre de 1","Obtenir le plus grand nombre de 1","Somme des dés ayant obtenu 1");
+  public static Challenge nombreDe2 = new Challenge("2","Nombre de 2","Obtenir le plus grand nombre de 2","Somme des dés ayant obtenu 2");
+  public static Challenge nombreDe3 = new Challenge("3","Nombre de 3","Obtenir le plus grand nombre de 3","Somme des dés ayant obtenu 3");
+  public static Challenge nombreDe4 = new Challenge("4","Nombre de 4","Obtenir le plus grand nombre de 4","Somme des dés ayant obtenu 4");
+  public static Challenge nombreDe5 = new Challenge("5","Nombre de 5","Obtenir le plus grand nombre de 5","Somme des dés ayant obtenu 5");
+  public static Challenge nombreDe6 = new Challenge("6","Nombre de 6","Obtenir le plus grand nombre de 6","Somme des dés ayant obtenu 6");
+  public static Challenge brelan = new Challenge("7","Brelan","Obtenir 3 dés de même valeur","Somme des 3 dés identiques");
+  public static Challenge carre = new Challenge("8","Carré","Obtenir 4 dés de même valeur","Somme des 4 dés identiques");
+  public static Challenge full = new Challenge("9","Full","Obtenir 3 dés de même valeur + 2 dés de même valeur","25 points");
+  public static Challenge petiteSuite = new Challenge("10","Petite Suite","Obtenir 1-2-3-4 ou 2-3-4-5 ou 3-4-5-6","30 points");
+  public static Challenge grandeSuite = new Challenge("11","Grande Suite","Obtenir 1-2-3-4-5 ou 2-3-4-5-6","40 points");
+  public static Challenge yams = new Challenge("12","yams","Obtenir 5 dés de même valeur","50 points");
+  public static Challenge chance = new Challenge("13","Chance","Obtenir le maximum de points","Somme des dés obtenus");
 
   // on met les challenges dans un tableau challenges, les [0-5] sont pour les challenges mineurs, les [6-12] pour les majeurs.
   public static Challenge[] challenges = new Challenge[13] {nombreDe1,nombreDe2,nombreDe3,nombreDe4,nombreDe5,nombreDe6,brelan,carre,full,petiteSuite,grandeSuite,yams,chance};
@@ -68,6 +70,7 @@ public static partial class Yams {
 
   static void Main() {
 
+    Console.Clear();
     Player player1 = new Player(1); // creation du premier joueur dont l'id vaut 1
     Player player2 = new Player(2); // creation du premier joueur dont l'id vaut 2
 
@@ -84,8 +87,14 @@ public static partial class Yams {
       tour(i, ref player2, ref player1);
     }
 
-    calcBonus(ref player1);
-    calcBonus(ref player2);
+    if (calcBonus(ref player1) >= 63) {
+      player1.bonus = 35;
+    } 
+    player1.scoreTotal += player1.bonus;
+    if (calcBonus(ref player2) >= 63) {
+      player2.bonus = 35;
+    } 
+    player2.scoreTotal += player2.bonus;
 
     jason(player1, player2);
 
@@ -97,12 +106,7 @@ public static partial class Yams {
   // numTour indexé à 0, on l'utilise pour attribuer correctement les des et les scores à chaque jouer et noter a quel tour chaque challenge est utilisé
   static void tour (int numTour, ref Player currentPlayer, ref Player adversaire) {
 
-    Console.WriteLine();
-    Console.WriteLine($"Debut du tour {numTour+1} de {currentPlayer.pseudo}.");   // numTour+1 car numTour indexé à 0 mais ici info destinée au joueur index à 1. 
-    Console.WriteLine();
-
-    // affichage des challenges restant pour le joueur
-    challengesRestants( ref currentPlayer);
+    Console.Clear();
 
     // initialisation des des à 0, on met 4 lignes car on verifie si un de peut etre relancer en fonction de l'etait de la meme colonne sur la ligne precedeente, exemple : des[2,3] est relançable seulement si des[1,3] == 0
     int[,] dices = new int[4,5];
@@ -129,7 +133,6 @@ public static partial class Yams {
 
     challengesRestants( ref currentPlayer);
 
-
     int choix = -1;
     bool validiteChoix = false;
 
@@ -148,15 +151,16 @@ public static partial class Yams {
 
       if ( choix == -1 ) 
       {
-        Console.WriteLine("----------------------------------------------------------------------------------------------------------");
-        Console.WriteLine("| CHALLENGE       | OBJECTIF                                            | POINTS                         |");
+        Console.Clear();
+        Console.WriteLine("----------------------------------------------------------------------------------------------------------------");
+        Console.WriteLine("| NUM | CHALLENGE       | OBJECTIF                                            | POINTS                         |");
         for ( int i = 0 ; i < 13 ; i++ ) {
           if ( currentPlayer.challRestants[i] ) {
-            Console.WriteLine("|-----------------|-----------------------------------------------------|--------------------------------|");
+            Console.WriteLine("|-----|-----------------|-----------------------------------------------------|--------------------------------|");
             Console.WriteLine(challenges[i].ToString());
           }
         }
-        Console.WriteLine("----------------------------------------------------------------------------------------------------------");
+        Console.WriteLine("----------------------------------------------------------------------------------------------------------------");
         Console.WriteLine();
         Console.Write($"(Rappel de vos dés : ");
         for (int i = 0 ; i < 5 ; i++ ) {
@@ -164,10 +168,6 @@ public static partial class Yams {
         }
         Console.WriteLine(")\n");
       } 
-      else if ( choix == -2 ) 
-      {
-        scoresActuels(ref currentPlayer, ref adversaire);
-      }
       else if ( choix >= -1 && choix < 13 && currentPlayer.challRestants[choix] ) 
       {
         validiteChoix = true;
@@ -188,6 +188,17 @@ public static partial class Yams {
     Console.ReadLine();
     Console.WriteLine();
   }
+
+  public static void status (int numTour, ref Player currentPlayer, ref Player adversaire) 
+  {
+    Console.WriteLine($"< TOUR   : {numTour+1} >\n< jOUEUR : {currentPlayer.pseudo} >");   // numTour+1 car numTour indexé à 0 mais ici info destinée au joueur index à 1. 
+    Console.WriteLine();
+
+    Console.WriteLine($"SCORES : \n{currentPlayer.pseudo} : \n\tscore total = {currentPlayer.scoreTotal}; \n\tpoints de challenges mineurs : {calcBonus(ref currentPlayer)} \n{adversaire.pseudo} : {adversaire.scoreTotal}\n");
+    Console.WriteLine();
+    challengesRestants( ref currentPlayer);
+  }
+
 
 
   // on verifie les challenges pas encore utilisés par le jouer pour les lui afficher
@@ -239,11 +250,6 @@ public static partial class Yams {
       }
     }
     Console.WriteLine();
-  }
-
-  public static void scoresActuels(ref Player currentPlayer, ref Player adversaire)
-  {
-    Console.WriteLine($"{currentPlayer.pseudo} a actuellement {currentPlayer.scoreTotal} points et {adversaire.pseudo} {adversaire.scoreTotal}\n");
   }
 
   public static void calcScore( int choix, int numTour, ref Player currentPlayer) {
@@ -410,7 +416,7 @@ public static partial class Yams {
   }
 
 
-  public static void calcBonus(ref Player currentPlayer) {
+  public static int calcBonus(ref Player currentPlayer) {
     int somme = 0;  // somme des scores
     currentPlayer.bonus = 0;
     // on additionne les scores des 6 premiers challenges (mineurs)
@@ -419,10 +425,11 @@ public static partial class Yams {
         somme += currentPlayer.scoreTour[i];
       }
     }
-    if (somme >= 63) {
-      currentPlayer.bonus = 35;
-    } 
-    currentPlayer.scoreTotal += currentPlayer.bonus;
+    /*if (somme >= 63) {*/
+    /*  currentPlayer.bonus = 35;*/
+    /*} */
+    /*currentPlayer.scoreTotal += currentPlayer.bonus;*/
+    return somme;
   }
 
   public static void jason(Player player1, Player player2) {
