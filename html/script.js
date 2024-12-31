@@ -4,59 +4,134 @@ let affichage;
 let choix;
 let codeHTML;
 
-document.getElementById('formulaire').addEventListener('submit', nomFichier_choixAffichage);
+document.getElementById('formulaire').addEventListener('submit', GestionAffichage);
 const contenantParametres = document.getElementById('contenuParametres');
 const contenantJoueurs = document.getElementById('contenuJoueurs');
 const contenantNumTour = document.getElementById('numeroTour');
 const contenantScoreFinal = document.getElementById('contenuScoreFinal');
-const contenantBoutonPrecedent = document.getElementById('boutonPrecedent');
 const contenantBoutonPre = document.getElementById('boutonPre');
 const contenantBoutonSui = document.getElementById('boutonSui');
 const contenantTourJ1 = document.getElementById('J1');
 const contenantTourJ2 = document.getElementById('J2');
 
-
-function nomFichier_choixAffichage(event){
+function GestionAffichage(event) {
     event.preventDefault();
     nomFichier = document.getElementById("nomPartie").value;
-    
+
     affichage = document.querySelector('input[name="partie"]:checked');
-    
-    //Vérifie si on a bien séléctionner un choix
+
+    // Vérifie si on a bien séléctionner un choix
     if (affichage) {
         choix = affichage.value;
-    } 
-    else{
+    } else {
         alert("Aucun choix de partie n'a été sélectionné.");
+        return;
     }
-    
-    if(choix == 'tout'){
-       affichageGlobal();                //Appel de la fonction qui va afficher toute la partie
+
+    // Masquer toutes les sections avant de les afficher en fonction du choix
+    document.getElementById('contenuTours').style.display = 'none';
+    document.getElementById('contenuParametres').style.display = 'none';
+    document.getElementById('contenuJoueurs').style.display = 'none';
+    document.getElementById('contenuScoreFinal').style.display = 'none';
+
+    // Vérifier le choix et afficher les sections correspondantes
+    if (choix == 'tout') {
+        affichageGlobal(); // Appel de la fonction qui va afficher toute la partie
     }
-    
-    if(choix == 'tour'){
-        affichageTourParTour();          //Appel de la fonction qui va afficher tour par tour
+
+    if (choix == 'tour') {
+        affichageTourParTour(); // Appel de la fonction qui va afficher tour par tour
     }
 }
 
-function afficherParametres(){
+function affichageGlobal() {
+    // Supprimer les boutons "Tour précédent" et "Tour suivant" s'ils existent
+    const boutonPrecedent = document.getElementById('precedent');
+    const boutonSuivant = document.getElementById('suivant');
+    if (boutonPrecedent) 
+        boutonPrecedent.remove();
+    if (boutonSuivant) 
+        boutonSuivant.remove();
+
+    // Afficher les sections pour "tout"
+    document.getElementById('contenuParametres').style.display = 'block';
+    document.getElementById('contenuJoueurs').style.display = 'block';
+    document.getElementById('contenuScoreFinal').style.display = 'block';
+
+    // Charger les données
+    afficherParametres();
+    afficherJoueurs();
+    afficherResultatsFinaux();
+}
+
+function affichageTourParTour() {
+    // Afficher la section des tours
+    document.getElementById('contenuTours').style.display = 'block';
+
+    // Vérifier si les boutons existent déjà, les ajouter sinon
+    if (!document.getElementById('precedent')) {
+        let boutonPrecedent = document.createElement("button");
+        boutonPrecedent.innerHTML = 'Tour précédent';
+        boutonPrecedent.setAttribute('id', "precedent");
+        contenantBoutonPre.appendChild(boutonPrecedent);
+    }
+
+    if (!document.getElementById('suivant')) {
+        let boutonSuivant = document.createElement('button');
+        boutonSuivant.innerHTML = 'Tour suivant';
+        boutonSuivant.setAttribute('id', "suivant");
+        contenantBoutonSui.appendChild(boutonSuivant);
+    }
+
+    // Afficher le premier tour
+    let i = 1;
+    afficheTour(i);
+
+    // Gestion du bouton "Tour précédent"
+    document.getElementById('precedent').addEventListener('click', function () {
+        if (i > 1) {
+            i--;
+            afficheTour(i);
+        } else {
+            i = 13; // Dernier tour
+            afficheTour(i);
+        }
+    });
+
+    // Gestion du bouton "Tour suivant"
+    document.getElementById('suivant').addEventListener('click', function () {
+        if (i < 13) {
+            i++;
+            afficheTour(i);
+        } else {
+            i = 1; // Premier tour
+            afficheTour(i);
+        }
+    });
+
+    // Afficher les résultats finaux
+    document.getElementById('contenuScoreFinal').style.display = 'block';
+    afficherResultatsFinaux();
+}
+
+function afficherParametres() {
     fetch("http://yams.iutrs.unistra.fr:3000/api/games/" + nomFichier + "/parameters")
         .then(response => response.json())
         .then(data => {
-            codeHTML = `                
+            codeHTML = `
                 <h2>Paramètres de la partie</h2>
                 <p>Code_Partie : ${data.code}</p>
                 <p>Date_Partie : ${data.date}</p><br>
             `;
-                contenantParametres.innerHTML = codeHTML;
+            contenantParametres.innerHTML = codeHTML;
         })
         .catch(error => console.error('Erreur de chargement du fichier', error));
 }
 
-function afficherJoueurs(){
+function afficherJoueurs() {
     fetch("http://yams.iutrs.unistra.fr:3000/api/games/" + nomFichier + "/players")
         .then(response => response.json())
-        .then(data =>{
+        .then(data => {
             codeHTML = `
                 <h2>Les joueurs</h2>
                 <table>
@@ -64,12 +139,10 @@ function afficherJoueurs(){
                         <th>ID</th>
                         <th>Pseudo</th>
                     </tr>
-                    
                     <tr>
                         <td>${data[0].id}</td>
                         <td>${data[0].pseudo}</td>
                     </tr>
-                    
                     <tr>
                         <td>${data[1].id}</td>
                         <td>${data[1].pseudo}</td>
@@ -82,10 +155,10 @@ function afficherJoueurs(){
         .catch(error => console.error('Erreur de chargement du fichier', error));
 }
 
-function afficherResultatsFinaux(){
+function afficherResultatsFinaux() {
     fetch("http://yams.iutrs.unistra.fr:3000/api/games/" + nomFichier + "/final-result")
         .then(response => response.json())
-        .then(data =>{
+        .then(data => {
             codeHTML = `
                 <h2>Scores finaux</h2>
                 <table>
@@ -94,13 +167,11 @@ function afficherResultatsFinaux(){
                         <th>Bonus</th>
                         <th>Score</th>
                     </tr>
-                    
                     <tr>
                         <td>${data[0].id_player}</td>
                         <td>${data[0].bonus}</td>
                         <td>${data[0].score}</td>
                     </tr>
-                    
                     <tr>
                         <td>${data[1].id_player}</td>
                         <td>${data[1].bonus}</td>
@@ -114,29 +185,17 @@ function afficherResultatsFinaux(){
         .catch(error => console.error('Erreur de chargement du fichier', error));
 }
 
-function affichageGlobal(){    
-    //Commencer par les paramètres
-    afficherParametres();
-        
-    //Les joueurs
-    afficherJoueurs();
-    
-    //Résultats finaux
-    afficherResultatsFinaux();
-}   
-
-
-function afficheTour(tour){
+function afficheTour(tour) {
     fetch("http://yams.iutrs.unistra.fr:3000/api/games/" + nomFichier + "/rounds/" + tour)
         .then(response => response.json())
-        .then(data => {            
+        .then(data => {
             let codeHTML = `<h2> Tour ${data.id} </h2>`;
             contenantNumTour.innerHTML = codeHTML;
-                
+
             let codeJ1 = `
                 <h3> Joueur 1 </h3>
                 <h4> Dés </h4>
-                
+
                 <table>
                     <tr>
                         <th>n°1</th>
@@ -145,12 +204,11 @@ function afficheTour(tour){
                         <th>n°4</th>
                         <th>n°5</th>
                     </tr>
-                    
+
                     <tr>
             `;
-            
-            
-            for(let j=0; j<5; j++){
+
+            for (let j = 0; j < 5; j++) {
                 codeJ1 += `<td>${data.results[0].dice[j]}</td>`;
             }
 
@@ -161,8 +219,7 @@ function afficheTour(tour){
                 <p>Score du tour : ${data.results[0].score}</p>
             `;
 
-            
-            // Joueur 2
+            // joueur 2
             let codeJ2 = `
                 <h3> Joueur 2 </h5>
                 <h4> Dés </h4>
@@ -174,16 +231,16 @@ function afficheTour(tour){
                         <th>n°4</th>
                         <th>n°5</th>
                     </tr>
-                    
+
                     <tr>
             `;
-            
-            for(let j=0; j<5; j++){
+
+            for (let j = 0; j < 5; j++) {
                 codeJ2 += `<td>${data.results[1].dice[j]}</td>`;
             }
 
             codeJ2 += `
-                </tr>
+                    </tr>
                 </table>
                 <p>Challenge choisi : ${data.results[1].challenge}</p>
                 <p>Score du tour : ${data.results[1].score}</p>
@@ -197,65 +254,13 @@ function afficheTour(tour){
 }
 
 
-function affichageTourParTour(){
-    //Rajouter les boutons (changer de tour)
-    let boutonPrecedent = document.createElement("button")  
-    boutonPrecedent.innerHTML='Tour précédent'
-    boutonPrecedent.setAttribute('id', "precedent")
-    
-    let boutonSuivant = document.createElement('button')
-    boutonSuivant.innerHTML = 'Tour suivant'
-    boutonSuivant.setAttribute('id', "suivant")
-
-    contenantBoutonPre.appendChild(boutonPrecedent)
-    contenantBoutonSui.appendChild(boutonSuivant)
-    
-    //Afficher les tours
-    let i = 1;
-    afficheTour(i);
-    
-    document.getElementById('precedent').addEventListener('click', function(){
-        if(i > 1){
-            i--;
-            afficheTour(i);
-        } 
-        else{
-            i = 13;
-            afficheTour(i);
-        }
-    });
-    document.getElementById('suivant').addEventListener('click', function(){
-        if(i<13){
-            i++;
-            afficheTour(i);
-        }
-        else{
-            i = 1;
-            afficheTour(i);
-        }
-    });
-    //Afficher les résultats finaux
-    afficherResultatsFinaux();
-}
-
-
-
-
-
-
-
-
-
-
-
-
-    
+// PARTIE TROLL
 let image = document.querySelector("img");
 
 image.addEventListener("click", (event) => {
   let src = image.getAttribute("src");
   if (src === "images/des.png") {
-    image.setAttribute("src", "images/yeux.png");
+    image.setAttribute("src", "images/yeux.jpg");
   } else {
     image.setAttribute("src", "images/des.png");
   }
