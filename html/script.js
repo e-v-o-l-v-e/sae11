@@ -30,9 +30,9 @@ function GestionAffichage(event) {
 
     // Masquer toutes les sections avant de les afficher en fonction du choix
     document.getElementById('contenuTours').style.display = 'none';
-    document.getElementById('contenuParametres').style.display = 'none';
-    document.getElementById('contenuJoueurs').style.display = 'none';
-    document.getElementById('contenuScoreFinal').style.display = 'none';
+    contenantParametres.style.display = 'none';
+    contenantJoueurs.style.display = 'none';
+    contenantScoreFinal.style.display = 'none';
 
     // Vérifier le choix et afficher les sections correspondantes
     if (choix == 'tout') {
@@ -53,10 +53,11 @@ function affichageGlobal() {
     if (boutonSuivant) 
         boutonSuivant.remove();
 
+    
     // Afficher les sections pour "tout"
-    document.getElementById('contenuParametres').style.display = 'block';
-    document.getElementById('contenuJoueurs').style.display = 'block';
-    document.getElementById('contenuScoreFinal').style.display = 'block';
+    contenantParametres.style.display = 'block';
+    contenantJoueurs.style.display = 'block';
+    contenantScoreFinal.style.display = 'block';    
 
     // Charger les données
     afficherParametres();
@@ -110,7 +111,7 @@ function affichageTourParTour() {
     });
 
     // Afficher les résultats finaux
-    document.getElementById('contenuScoreFinal').style.display = 'block';
+    contenantScoreFinal.style.display = 'block';
     afficherResultatsFinaux();
 }
 
