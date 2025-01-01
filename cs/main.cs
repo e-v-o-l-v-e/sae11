@@ -133,9 +133,6 @@ public static partial class Yams {
 
     challengesRestants( ref currentPlayer);
 
-    //tmp]
-    Console.ReadLine();
-
     int choix = -1;
     bool validiteChoix = false;
 
@@ -195,11 +192,11 @@ public static partial class Yams {
   public static void status (int numTour, ref Player currentPlayer, ref Player adversaire) 
   {
     Console.WriteLine($"< TOUR   : {numTour+1} >\n< jOUEUR : {currentPlayer.pseudo} >");   // numTour+1 car numTour indexé à 0 mais ici info destinée au joueur index à 1. 
-    Console.WriteLine();
+    Console.WriteLine("-----");
 
-    Console.WriteLine($"SCORES : \n{currentPlayer.pseudo} : \n\tscore total = {currentPlayer.scoreTotal}; \n\tpoints de challenges mineurs : {calcBonus(ref currentPlayer)} \n{adversaire.pseudo} : {adversaire.scoreTotal}\n");
-    Console.WriteLine();
-    challengesRestants( ref currentPlayer);
+    Console.WriteLine($"SCORES : \n{currentPlayer.pseudo} : \n - score total = {currentPlayer.scoreTotal}; \n - points de challenges mineurs : {calcBonus(ref currentPlayer)} \n{adversaire.pseudo} :\n - score total : {adversaire.scoreTotal}\n - points de challenges mineurs : {calcBonus(ref adversaire)}");
+    Console.WriteLine("-----");
+    /*challengesRestants( ref currentPlayer);*/
   }
 
 
@@ -230,7 +227,7 @@ public static partial class Yams {
     }
 
 
-    Console.SetCursorPosition(0,10);
+    Console.SetCursorPosition(0,11);
     Console.Write($"Voici vos dés : ");
     for (int i = 0 ; i < 5 ; i++ ) {
       Console.Write($"{dices[line,i]}. ");
@@ -242,7 +239,7 @@ public static partial class Yams {
     if ( line < 3 ) {
       // choix du joueur
       for ( int i = 0 ; i < 5 ; i++ ) {
-        Console.SetCursorPosition(0,15);
+        Console.SetCursorPosition(0,18);
         Console.Write($"Souhaitez-vous garder le dé numéro {i+1} qui vaut {dices[line,i]} ? y/*. ");
         afficheUnDes(dices,line,i);
         if ( 'y' == Console.ReadKey().KeyChar ) {
@@ -252,7 +249,7 @@ public static partial class Yams {
           dices[line,i] = 0;
           relance = true;
         }
-        Console.SetCursorPosition(0,24);
+        Console.SetCursorPosition(0,28);
         Console.Write(" ");
       }
     }
