@@ -4,6 +4,7 @@
     padding: 0;
 }
 
+
 body {
     font-family: Arial, sans-serif;
     background-color: #FFF0DC;
@@ -86,19 +87,36 @@ legend {
 
 #bouton, button {
     text-align: center;
-    background-color: rgb(211, 104, 104);
     color: white;
     border: none;
     padding: 10px 20px;
     border-radius: 5px;
     cursor: pointer;
     font-size: 1rem;
-    transition: background-color 0.3s ease;
     width: 100%;
 }
 
-#bouton:hover, button:hover {
-    background-color: #882626;
+/* Style du bouton de validation */
+#bouton input {
+    background-color: rgb(211, 104, 104);
+    display: inline-block; /* Permet de contrôler les dimensions */
+    width: 500px; /* Largeur du bouton */
+    height: 30px; /* Hauteur du bouton */
+    border: none; /* Supprime les bordures par défaut */
+    border-radius: 10px; /* Coins arrondis */
+    cursor: pointer; /* Curseur en forme de main au survol */
+    transition: transform 0.2s, background-color 0.2s; /* Ajoute des animations */
+}
+
+/* Effet au survol */
+#bouton input:hover {
+    background-color: #0056b3; /* Couleur plus foncée au survol */
+    transform: scale(1.05); /* Agrandit légèrement le bouton */
+}
+
+/* Effet au clic */
+#bouton input:active {
+    transform: scale(0.95); /* Réduit légèrement le bouton pour simuler un clic */
 }
 
 main {
@@ -159,7 +177,7 @@ th {
 }
 
 tr:nth-child(even) {        /* Que pour les lignes paires */
-    background-color: #f8e0b5;
+    background-color: #f1e5cd;
 }
 
 #AfficheJoueur {
@@ -220,5 +238,48 @@ tr:nth-child(even) {        /* Que pour les lignes paires */
 
 /* BOUTONS */
 
+#boutonsContainers {
+    display: flex;
+    position: relative;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%; /* Réduit la largeur globale */
+    height: 100%;
+    padding: 0 20px;
+}
+
+#affichage {
+    flex-grow: 1; /* Occupe tout l’espace disponible */
+    padding: 20px;
+    text-align: center;
+}
+
+/* Buttons */
+.bouton {
+    position: relative;
+    width: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 12px;
+    cursor: pointer;
+    border: none;
+    color: white;
+}
 
 
+#precedent , #suivant {
+    height: 670px;
+    background-color: rgb(211, 104, 104);
+    border-radius: 20px;
+
+}
+
+#precedent:hover, #suivant:hover{
+    background-color: #882626;
+    transform: scale(1.05); /* Agrandit légèrement le bouton */
+}
+
+#precedent:active #suivant:active {
+    transform: scale(0.95); /* Réduit légèrement le bouton pour simuler un clic */
+}
