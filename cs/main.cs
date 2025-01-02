@@ -66,25 +66,29 @@ public static partial class Yams {
   // generateur aleatoire, en dehors de la boucle pour etre accessible partout et garantir plus d'aleatoire
   public static Random rnd = new Random();
 
+  // on declare les 2 joueurs de maniere à ce qu'ils soit accessibles partout
+  static Player player1 = new Player(1); // creation du premier joueur dont l'id vaut 1
+  static Player player2 = new Player(2); // creation du premier joueur dont l'id vaut 2
 
 
   static void Main() {
-
     Console.Clear();
-    Player player1 = new Player(1); // creation du premier joueur dont l'id vaut 1
-    Player player2 = new Player(2); // creation du premier joueur dont l'id vaut 2
 
-    Console.Write("Entrez le pseudo du premier joueur : ");
-    player1.pseudo = Console.ReadLine();
+    do {
+      Console.Write("Entrez le pseudo du premier joueur : ");
+      player1.pseudo = Console.ReadLine();
+    } while (player1.pseudo == "");
 
-    Console.Write("Entrez le pseudo du second joueur : ");
-    player2.pseudo = Console.ReadLine();
+    do {
+      Console.Write("Entrez le pseudo du second joueur : ");
+      player2.pseudo = Console.ReadLine();
+    } while (player2.pseudo == "");
 
     // tours de jeu
     for ( int i = 0 ; i < 13 ; i++ ) 
     {
-      tour(i, ref player1, ref player2);
-      tour(i, ref player2, ref player1);
+      tour(i, ref player1);
+      tour(i, ref player2);
     }
 
     if (calcBonus(ref player1) >= 63) {
@@ -103,16 +107,16 @@ public static partial class Yams {
     Console.WriteLine($"{player2.pseudo} : {player2.scoreTotal}");
   }
 
-  // numTour indexé à 0, on l'utilise pour attribuer correctement les des et les scores à chaque jouer et noter a quel tour chaque challenge est utilisé
-  static void tour (int numTour, ref Player currentPlayer, ref Player adversaire) {
 
+  // numTour indexé à 0, on l'utilise pour attribuer correctement les des et les scores à chaque jouer et noter a quel tour chaque challenge est utilisé
+  static void tour (int numTour, ref Player currentPlayer) {
     Console.Clear();
 
     int[,] dices = new int[4,5];
     int line = 1;
     bool relance = false;
 
-    status(numTour, ref currentPlayer, ref adversaire);
+    status(numTour);
     // appel fonction principale de tour qui change les 0 en int aleatoire entre 1 et 6 pour la ligne du tour puis demande au joueur quels dés ils souhaitent garder 
     lancerDes(ref dices, line, ref relance);
 
@@ -131,7 +135,7 @@ public static partial class Yams {
       currentPlayer.dices[numTour,i] = dices[line,i];
     }
 
-    challengesRestants( ref currentPlayer);
+    challengesRestants(ref currentPlayer);
 
     int choix = -1;
     bool validiteChoix = false;
@@ -189,13 +193,20 @@ public static partial class Yams {
     Console.WriteLine();
   }
 
-  public static void status (int numTour, ref Player currentPlayer, ref Player adversaire) 
+  public static void status (int numTour) 
   {
     Console.WriteLine($"< TOUR   : {numTour+1} >\n< jOUEUR : {currentPlayer.pseudo} >");   // numTour+1 car numTour indexé à 0 mais ici info destinée au joueur index à 1. 
-    Console.WriteLine("-----");
+    Console.WriteLine("----------");
 
-    Console.WriteLine($"SCORES : \n{currentPlayer.pseudo} : \n - score total = {currentPlayer.scoreTotal}; \n - points de challenges mineurs : {calcBonus(ref currentPlayer)} \n{adversaire.pseudo} :\n - score total : {adversaire.scoreTotal}\n - points de challenges mineurs : {calcBonus(ref adversaire)}");
-    Console.WriteLine("-----");
+    /*Console.WriteLine($"< SCORES > : \n{currentPlayer.pseudo} : \n - score total = {currentPlayer.scoreTotal}; \n - points de challenges mineurs : {calcBonus(ref currentPlayer)} \n{adversaire.pseudo} :\n - score total : {adversaire.scoreTotal}\n - points de challenges mineurs : {calcBonus(ref adversaire)}");*/
+    /*Console.WriteLine();*/
+    Console.WriteLine("----------");
+    Console.WriteLine($"
+< SCORES > -----
+| {currentPlayer.pseudo.PadRight(10)} | {currentPlayer.scoreTotal}
+        ");
+
+    Console.WriteLine("< DÉS >");
     /*challengesRestants( ref currentPlayer);*/
   }
 
@@ -227,7 +238,7 @@ public static partial class Yams {
     }
 
 
-    Console.SetCursorPosition(0,11);
+    Console.SetCursorPosition(0,12);
     Console.Write($"Voici vos dés : ");
     for (int i = 0 ; i < 5 ; i++ ) {
       Console.Write($"{dices[line,i]}. ");
@@ -239,7 +250,7 @@ public static partial class Yams {
     if ( line < 3 ) {
       // choix du joueur
       for ( int i = 0 ; i < 5 ; i++ ) {
-        Console.SetCursorPosition(0,18);
+        Console.SetCursorPosition(0,19);
         Console.Write($"Souhaitez-vous garder le dé numéro {i+1} qui vaut {dices[line,i]} ? y/*. ");
         afficheUnDes(dices,line,i);
         if ( 'y' == Console.ReadKey().KeyChar ) {
@@ -249,7 +260,7 @@ public static partial class Yams {
           dices[line,i] = 0;
           relance = true;
         }
-        Console.SetCursorPosition(0,28);
+        Console.SetCursorPosition(0,29);
         Console.Write(" ");
       }
     }
