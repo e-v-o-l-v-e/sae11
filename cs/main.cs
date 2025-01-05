@@ -116,7 +116,7 @@ public static partial class Yams {
     int line = 1;
     bool relance = false;
 
-    status(numTour);
+    status(numTour, ref currentPlayer);
     // appel fonction principale de tour qui change les 0 en int aleatoire entre 1 et 6 pour la ligne du tour puis demande au joueur quels dés ils souhaitent garder 
     lancerDes(ref dices, line, ref relance);
 
@@ -193,14 +193,14 @@ public static partial class Yams {
     Console.WriteLine();
   }
 
-  public static void status (int numTour) 
+  public static void status (int numTour, ref Player currentPlayer) 
   {
     Console.WriteLine($"< TOUR   : {numTour+1} >\n< jOUEUR : {currentPlayer.pseudo} >");   // numTour+1 car numTour indexé à 0 mais ici info destinée au joueur index à 1. 
-    Console.WriteLine("----------");
+    /*Console.WriteLine("----------");*/
 
     /*Console.WriteLine($"< SCORES > : \n{currentPlayer.pseudo} : \n - score total = {currentPlayer.scoreTotal}; \n - points de challenges mineurs : {calcBonus(ref currentPlayer)} \n{adversaire.pseudo} :\n - score total : {adversaire.scoreTotal}\n - points de challenges mineurs : {calcBonus(ref adversaire)}");*/
     /*Console.WriteLine();*/
-    Console.WriteLine("----------");
+    /*Console.WriteLine("----------");*/
     Console.WriteLine($"
 < SCORES > -----
 | {currentPlayer.pseudo.PadRight(10)} | {currentPlayer.scoreTotal}
