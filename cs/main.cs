@@ -251,12 +251,22 @@ public static partial class Yams {
       // choix du joueur
       for ( int i = 0 ; i < 5 ; i++ ) {
         Console.SetCursorPosition(0,19);
-        Console.Write($"Souhaitez-vous garder le dé numéro {i+1} qui vaut {dices[line,i]} ? y/*. ");
+        Console.Write($"Souhaitez-vous garder le dé numéro {i+1} qui vaut {dices[line,i]} ? y(Yes)/a(All)/*(No). ");
         afficheUnDes(dices,line,i);
-        if ( 'y' == Console.ReadKey().KeyChar ) {
+        char input = Console.ReadKey().KeyChar;
+        if ( input == 'y' )
+        {
           dices[line+1,i] = dices[line,i];
         }
-        else {
+        else if (input == 'a') 
+        {
+          while ( i < 5 ) {
+            dices[line+1,i] = dices[line,i];
+            i++;
+          }
+        }
+        else 
+        {
           dices[line,i] = 0;
           relance = true;
         }
