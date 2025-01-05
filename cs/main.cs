@@ -26,7 +26,12 @@ public static partial class Yams {
     }
   }
 
-  public struct Challenge {     // structure de création des challenges
+  // on declare les 2 joueurs de maniere à ce qu'ils soit accessibles partout
+  static Player player1 = new Player(1);
+  static Player player2 = new Player(2);
+
+  // structure des challenges, 
+  public struct Challenge {     
     public string num;
     public string challenge;
     public string objectif;
@@ -39,10 +44,10 @@ public static partial class Yams {
       this.nombreDePoints = nombreDePoints;
     }
 
+    //on override la string pour afficher correctement dans le tableau
     public override string ToString() {
       return $"| {num.PadLeft(2)}  | {challenge.PadRight(15)} | {objectif.PadRight(52)}| {nombreDePoints.PadRight(30)} |";
     }
-
   }
   // on initialise tous les challenges
   public static Challenge nombreDe1 = new Challenge("1","Nombre de 1","Obtenir le plus grand nombre de 1","Somme des dés ayant obtenu 1");
@@ -63,14 +68,11 @@ public static partial class Yams {
   public static Challenge[] challenges = new Challenge[13] {nombreDe1,nombreDe2,nombreDe3,nombreDe4,nombreDe5,nombreDe6,brelan,carre,full,petiteSuite,grandeSuite,yams,chance};
 
 
-  // generateur aleatoire, en dehors de la boucle pour etre accessible partout et garantir plus d'aleatoire
+  // generateur aleatoire, en dehors de la boucle pour etre accessible partout (et l'aleatoire est vraiment aléatoire)
   public static Random rnd = new Random();
 
-  // on declare les 2 joueurs de maniere à ce qu'ils soit accessibles partout
-  static Player player1 = new Player(1); // creation du premier joueur dont l'id vaut 1
-  static Player player2 = new Player(2); // creation du premier joueur dont l'id vaut 2
 
-
+  // main saisit les pseudos, lance les fonctions tour, calculer des score, json, et affiche les score finaux
   static void Main() {
     Console.Clear();
 
@@ -116,12 +118,11 @@ public static partial class Yams {
     int line = 1;
     bool relance = false;
 
+    // on affiche les informations du tour, joueur, scores
     status(numTour, ref currentPlayer);
+
     // appel fonction principale de tour qui change les 0 en int aleatoire entre 1 et 6 pour la ligne du tour puis demande au joueur quels dés ils souhaitent garder 
     lancerDes(ref dices, line, ref relance);
-
-    // on monte d'un niveau dans le tableau des dés
-
     // on relance les des jusqu'a 2 fois si le joueur decide de relancer certain dés
     for (int i = 0 ; i < 2 ; i++ ) {
       if ( relance ) {
@@ -129,12 +130,15 @@ public static partial class Yams {
         lancerDes(ref dices, line, ref relance);
       }
     }
-
     // on enregistre les des finaux dans la structure du joueur
     for (int i = 0 ; i < 5 ; i++ ) {
       currentPlayer.dices[numTour,i] = dices[line,i];
     }
 
+    // on affiche les challenges restants pour que le joueur puisse choisir
+    Console.SetCursorPosition(0,20);
+    Console.Write("\r" + new string(' ', Console.WindowWidth) + "\r");
+    Console.SetCursorPosition(0,19);
     challengesRestants(ref currentPlayer);
 
     int choix = -1;
@@ -202,8 +206,10 @@ public static partial class Yams {
     /*Console.WriteLine();*/
     /*Console.WriteLine("----------");*/
     Console.WriteLine($"
-< SCORES > -----
-| {currentPlayer.pseudo.PadRight(10)} | {currentPlayer.scoreTotal}
+< SCORES >
+| pseudo    | total | challenges mineurs 
+| {player1.pseudo.Substring(0,10).PadRight(10)}|  {player1.scoreTotal:D3}  |  {player1.scoreTotal:D3}  | 
+| {player2.pseudo.Substring(0,10).PadRight(10)}|  {player2.scoreTotal:D3}  |  {player2.scoreTotal:D3}  | 
         ");
 
     Console.WriteLine("< DÉS >");
@@ -249,8 +255,10 @@ public static partial class Yams {
 
     if ( line < 3 ) {
       // choix du joueur
+      Console.SetCursorPosition(0,19);
+      Console.WriteLine($"Lancers restants : {3 - line}");
       for ( int i = 0 ; i < 5 ; i++ ) {
-        Console.SetCursorPosition(0,19);
+        Console.SetCursorPosition(0,20);
         Console.Write($"Souhaitez-vous garder le dé numéro {i+1} qui vaut {dices[line,i]} ? y(Yes)/a(All)/n(aucun)/*(no). ");
         afficheUnDes(dices,line,i);
         char input = Console.ReadKey().KeyChar;
@@ -314,6 +322,7 @@ public static partial class Yams {
             }
             if (compteur >= 3) {
               score = 3*i;
+              break;
             }
           }
           break;
@@ -329,6 +338,7 @@ public static partial class Yams {
             }
             if (compteur >= 4) {
               score = 4*i;
+              break;
             }
           }
           break;
