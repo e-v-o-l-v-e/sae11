@@ -305,10 +305,6 @@ JOUEUR : {currentPlayer.pseudo}");
           }
           relance = true;
         }
-        else if (input == '?')
-        {
-
-        }
         clearLine(27);
       }
     }
