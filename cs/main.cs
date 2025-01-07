@@ -110,7 +110,7 @@ public static partial class Yams {
 
     jason(player1, player2);
 
-    Console.WriteLine("La partie est finis, voici vos scores : ");
+    Console.WriteLine("La partie est finie, voici vos scores : ");
     Console.WriteLine($"{player1.pseudo} : {player1.scoreTotal}");
     Console.WriteLine($"{player2.pseudo} : {player2.scoreTotal}");
   }
@@ -147,11 +147,10 @@ public static partial class Yams {
 
     int choix = -1;
     bool validiteChoix = false;
-    
-    Console.SetCursorPosition(0,34-numTour);
 
     // on verifie si le challenge est encore jouable
     while ( validiteChoix == false ) {
+      Console.SetCursorPosition(0,34-numTour);
       Console.Write("Quel challenge souhaitez-vous jouer ? (entrez 0 pour voir la liste des challenges, -1 pour le score actuel) : ");
 
       if ( !int.TryParse(Console.ReadLine(), out choix) ) 
@@ -188,9 +187,13 @@ public static partial class Yams {
         currentPlayer.challRestants[choix] = false;
         currentPlayer.challTour[numTour] = choix;
       } 
-      else 
+      else if ( choix < 0 || choix > 13 )
       {
         Console.WriteLine("Vous devez choisir un nombre entre 0 et 13 (inclus).");
+      }
+      else
+      {
+          Console.WriteLine("Ce challenge n'est plus disponible.                  ");
       }
     }
 
