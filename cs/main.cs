@@ -1,8 +1,12 @@
 using System;
 using System.IO;
+using System.Linq;
 
 public static partial class Yams {
 
+  /*-----------------
+    INITIALISATION
+  -----------------*/
   public struct Player
   {
     public int id;               // id du joueur, 1 ou 2 etant donnée que le nombre max de jouer est 2
@@ -14,9 +18,10 @@ public static partial class Yams {
     public int bonus;
     public int scoreTotal;       // le score final
 
+    // constructeur qui initialise les valeurs par precaution
     public Player(int id) {
       this.id = id;
-      this.pseudo = "Unknown";
+      this.pseudo = "Unknown yet";
       this.dices = new int [13,5];
       this.challRestants = new bool [13] {true, true, true, true, true, true, true, true, true, true, true, true ,true};
       this.challTour = new int [13];
@@ -26,17 +31,18 @@ public static partial class Yams {
     }
   }
 
-  // on declare les 2 joueurs de maniere à ce qu'ils soit accessibles partout
+  // on declare les 2 joueurs, pour qu'ils soit accessibles partout
   static Player player1 = new Player(1);
   static Player player2 = new Player(2);
 
-  // structure des challenges, 
+  // structure challenge, pour simplifier l'affichage
   public struct Challenge {     
     public string num;
     public string challenge;
     public string objectif;
     public string nombreDePoints;
 
+    // constructeur
     public Challenge(string num, string challenge, string objectif, string nombreDePoints) {  // on cree la fonction createchallege pour simplifier l'attribution des differentes valeurs
       this.num = num;
       this.challenge = challenge;
@@ -64,15 +70,15 @@ public static partial class Yams {
   public static Challenge yams = new Challenge("12","yams","Obtenir 5 dés de même valeur","50 points");
   public static Challenge chance = new Challenge("13","Chance","Obtenir le maximum de points","Somme des dés obtenus");
 
-  // on met les challenges dans un tableau challenges, les [0-5] sont pour les challenges mineurs, les [6-12] pour les majeurs.
+  // on met les challenges dans un tableau challenges pour simplifier leur gestion, les [0-5] sont pour les challenges mineurs, les [6-12] pour les majeurs.
   public static Challenge[] challenges = new Challenge[13] {nombreDe1,nombreDe2,nombreDe3,nombreDe4,nombreDe5,nombreDe6,brelan,carre,full,petiteSuite,grandeSuite,yams,chance};
 
 
-  // generateur aleatoire, en dehors de la boucle pour etre accessible partout (et l'aleatoire est vraiment aléatoire)
+  // generateur aleatoire, en dehors de la boucle pour etre accessible partout (et l'aleatoire semble etre plus aléatoire)
   public static Random rnd = new Random();
 
-
-  // main saisit les pseudos, lance les fonctions tour, calculer des score, json, et affiche les score finaux
+  
+  // main saisit les pseudos, lance les fonctions tour, calcule des score et json, puis affiche les score finaux avant de terminer
   static void Main() {
     Console.Clear();
 
@@ -110,7 +116,7 @@ public static partial class Yams {
   }
 
 
-  // numTour indexé à 0, on l'utilise pour attribuer correctement les des et les scores à chaque jouer et noter a quel tour chaque challenge est utilisé
+  // fonction du tour, prend comme argument numTour indexé à 0, on l'utilise pour attribuer correctement les des et les scores à chaque jouer et noter a quel tour chaque challenge est utilisé
   static void tour (int numTour, ref Player currentPlayer) {
     Console.Clear();
 
@@ -136,13 +142,13 @@ public static partial class Yams {
     }
 
     // on affiche les challenges restants pour que le joueur puisse choisir
-    Console.SetCursorPosition(0,20);
-    Console.Write("\r" + new string(' ', Console.WindowWidth) + "\r");
-    Console.SetCursorPosition(0,19);
+    clearLine(19,13);
     challengesRestants(ref currentPlayer);
 
     int choix = -1;
     bool validiteChoix = false;
+    
+    Console.SetCursorPosition(0,34-numTour);
 
     // on verifie si le challenge est encore jouable
     while ( validiteChoix == false ) {
@@ -199,27 +205,26 @@ public static partial class Yams {
 
   public static void status (int numTour, ref Player currentPlayer) 
   {
-    Console.WriteLine($"< TOUR   : {numTour+1} >\n< jOUEUR : {currentPlayer.pseudo} >");   // numTour+1 car numTour indexé à 0 mais ici info destinée au joueur index à 1. 
-    /*Console.WriteLine("----------");*/
-
-    /*Console.WriteLine($"< SCORES > : \n{currentPlayer.pseudo} : \n - score total = {currentPlayer.scoreTotal}; \n - points de challenges mineurs : {calcBonus(ref currentPlayer)} \n{adversaire.pseudo} :\n - score total : {adversaire.scoreTotal}\n - points de challenges mineurs : {calcBonus(ref adversaire)}");*/
-    /*Console.WriteLine();*/
-    /*Console.WriteLine("----------");*/
     Console.WriteLine($"
-< SCORES >
-| pseudo    | total | challenges mineurs 
-| {player1.pseudo.Substring(0,10).PadRight(10)}|  {player1.scoreTotal:D3}  |  {player1.scoreTotal:D3}  | 
-| {player2.pseudo.Substring(0,10).PadRight(10)}|  {player2.scoreTotal:D3}  |  {player2.scoreTotal:D3}  | 
-        ");
-
-    Console.WriteLine("< DÉS >");
-    /*challengesRestants( ref currentPlayer);*/
+< SCORES >--------------------------------
+| pseudo    | score total |chall. mineurs|
+|-----------|-------------|--------------|
+| {player1.pseudo.PadRight(10).Substring(0,10)}|     {player1.scoreTotal:D3}     |     {calcBonus(ref player1):D3}      | 
+| {player2.pseudo.PadRight(10).Substring(0,10)}|     {player2.scoreTotal:D3}     |     {calcBonus(ref player2):D3}      | 
+------------------------------------------");
+    // numTour+1 car numTour indexé à 0 mais ici info destinée au joueur index à 1.
+    Console.WriteLine($"
+TOUR   : {numTour+1:D2}
+JOUEUR : {currentPlayer.pseudo}");
+    Console.WriteLine();
+    Console.WriteLine("---------==< DÉS >==---------");
   }
 
 
 
   // on verifie les challenges pas encore utilisés par le jouer pour les lui afficher
   public static void challengesRestants(ref Player currentPlayer){
+    clearLine(19,13);
     Console.WriteLine("Voici les challenges qui n'ont pas encore été joués : ");
     for (int i = 0; i < 13; i++) {
       if (currentPlayer.challRestants[i] ) {
@@ -258,10 +263,21 @@ public static partial class Yams {
       Console.SetCursorPosition(0,19);
       Console.WriteLine($"Lancers restants : {3 - line}");
       for ( int i = 0 ; i < 5 ; i++ ) {
-        Console.SetCursorPosition(0,20);
-        Console.Write($"Souhaitez-vous garder le dé numéro {i+1} qui vaut {dices[line,i]} ? y(Yes)/a(All)/n(aucun)/*(no). ");
+        clearLine(20);
+        Console.Write($"Souhaitez-vous garder le dé numéro {i+1} qui vaut {dices[line,i]} ? y/n/a/q/?.");
         afficheUnDes(dices,line,i);
-        char input = Console.ReadKey().KeyChar;
+
+        char input;
+        char[] validInput = {'y','n','a','q'};
+        do {
+          input = Console.ReadKey().KeyChar;
+          if (input == '?') {
+            clearLine(28);
+            Console.WriteLine(" y = yes | a = yes pour tout ce qui reste \n n = no  | q = no pour tout ce qui reste");
+          }
+          clearLine(27);
+        } while (!validInput.Contains(input));
+
         if ( input == 'y' )
         {
           dices[line+1,i] = dices[line,i];
@@ -273,7 +289,12 @@ public static partial class Yams {
             i++;
           }
         }
-        else if (input == 'n') 
+        else if (input == 'n')
+        {
+          dices[line,i] = 0;
+          relance = true;
+        }
+        else if (input == 'q') 
         {
           while ( i < 5 ) {
             dices[line+1,i] = 0;
@@ -281,13 +302,11 @@ public static partial class Yams {
           }
           relance = true;
         }
-        else 
+        else if (input == '?')
         {
-          dices[line,i] = 0;
-          relance = true;
+
         }
-        Console.SetCursorPosition(0,29);
-        Console.Write(" ");
+        clearLine(27);
       }
     }
     Console.WriteLine();
@@ -459,7 +478,8 @@ public static partial class Yams {
   }
 
 
-  public static int calcBonus(ref Player currentPlayer) {
+  public static int calcBonus(ref Player currentPlayer) 
+  {
     int somme = 0;  // somme des scores
     currentPlayer.bonus = 0;
     // on additionne les scores des 6 premiers challenges (mineurs)
@@ -468,11 +488,17 @@ public static partial class Yams {
         somme += currentPlayer.scoreTour[i];
       }
     }
-    /*if (somme >= 63) {*/
-    /*  currentPlayer.bonus = 35;*/
-    /*} */
-    /*currentPlayer.scoreTotal += currentPlayer.bonus;*/
     return somme;
+  }
+
+  public static void clearLine(int l, int n = 1)
+  {
+    Console.SetCursorPosition(0,l);
+    for (int i = 0 ; i < n ; i++) {
+      Console.Write("\r" + new string(' ', Console.WindowWidth) + "\r");
+      Console.WriteLine();
+    }
+    Console.SetCursorPosition(0,l);
   }
 
   public static void jason(Player player1, Player player2) {
@@ -565,8 +591,6 @@ public static partial class Yams {
   }
 
 
-
-
   // les trucs useless mais stylés
   public static void afficheDes (int[,] dices, int line) {
 
@@ -657,61 +681,61 @@ public static partial class Yams {
       case 1:
         Console.WriteLine($"
 
-    -------
-   |       |
-   |   1   |
-   |       |
-    -------");
-          break;
+                        -------
+                       |       |
+                       |   1   |
+                       |       |
+                        -------");
+        break;
 
       case 2:
         Console.WriteLine($"
 
-    -------
-   | 2     |
-   |       |
-   |     2 |
-    -------");
-           break;
+                        -------
+                       | 2     |
+                       |       |
+                       |     2 |
+                        -------");
+        break;
 
       case 3:
         Console.WriteLine($"
 
-    -------
-   | 3     |
-   |   3   |
-   |     3 |
-    -------");
-           break;
+                        -------
+                       | 3     |
+                       |   3   |
+                       |     3 |
+                        -------");
+        break;
 
       case 4:
         Console.WriteLine($"
 
-    -------
-   | 4   4 |
-   |       |
-   | 4   4 |
-    -------");
-           break;
+                        -------
+                       | 4   4 |
+                       |       |
+                       | 4   4 |
+                        -------");
+        break;
 
       case 5:
         Console.WriteLine($"
 
-    -------
-   | 5   5 |
-   |   5   |
-   | 5   5 |
-    -------");
-           break;
+                        -------
+                       | 5   5 |
+                       |   5   |
+                       | 5   5 |
+                        -------");
+        break;
 
       case 6:
         Console.WriteLine($"
 
-    -------
-   | 6   6 |
-   | 6   6 |
-   | 6   6 |
-    -------");
+                        -------
+                       | 6   6 |
+                       | 6   6 |
+                       | 6   6 |
+                        -------");
         break;
     }
   }
