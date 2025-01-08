@@ -13,7 +13,7 @@ public static partial class Yams {
     public string pseudo;        // pseudo du joueur
     public int[,] dices;         // on va stocker tous les des finaux de chaque rounds
     public bool[] challRestants;     // les challenges encore utilisable par le joueur"▶",
-    public int[] challTour;
+    public int[] challTour;       // le challenge utilisé à chaque tour pra el joueur, avec l'index = le numero du tour (inedxé à 0)
     public int[] scoreTour;   // les scores de chaque round
     public int bonus;
     public int scoreTotal;       // le score final
