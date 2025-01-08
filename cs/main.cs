@@ -82,15 +82,20 @@ public static partial class Yams {
   static void Main() {
     Console.Clear();
 
-    do {
-      Console.Write("Entrez le pseudo du premier joueur : ");
-      player1.pseudo = Console.ReadLine();
-    } while (player1.pseudo == "");
+    try {
+      do {
+        Console.Write("Entrez le pseudo du premier joueur : ");
+        player1.pseudo = Console.ReadLine();
+      } while (player1.pseudo == "");
 
-    do {
-      Console.Write("Entrez le pseudo du second joueur : ");
-      player2.pseudo = Console.ReadLine();
-    } while (player2.pseudo == "");
+      do {
+        Console.Write("Entrez le pseudo du second joueur : ");
+        player2.pseudo = Console.ReadLine();
+      } while (player2.pseudo == "");
+    } catch (Exception ex) {
+      Console.WriteLine("Erreur lors de la saisie des pseudos : " + ex.Message);
+      return;
+    }
 
     // tours de jeu
     for ( int i = 0 ; i < 13 ; i++ ) 
@@ -113,6 +118,8 @@ public static partial class Yams {
     Console.WriteLine("La partie est finie, voici vos scores : ");
     Console.WriteLine($"{player1.pseudo} : {player1.scoreTotal}");
     Console.WriteLine($"{player2.pseudo} : {player2.scoreTotal}");
+
+    return;
   }
 
 
@@ -162,38 +169,43 @@ public static partial class Yams {
 
       Console.WriteLine();
 
-      if ( choix == -1 ) 
-      {
-        Console.Clear();
-        Console.WriteLine("----------------------------------------------------------------------------------------------------------------");
-        Console.WriteLine("| NUM | CHALLENGE       | OBJECTIF                                            | POINTS                         |");
-        for ( int i = 0 ; i < 13 ; i++ ) {
-          if ( currentPlayer.challRestants[i] ) {
-            Console.WriteLine("|-----|-----------------|-----------------------------------------------------|--------------------------------|");
-            Console.WriteLine(challenges[i].ToString());
+      try {
+        if ( choix == -1 ) 
+        {
+          Console.Clear();
+          Console.WriteLine("----------------------------------------------------------------------------------------------------------------");
+          Console.WriteLine("| NUM | CHALLENGE       | OBJECTIF                                            | POINTS                         |");
+          for ( int i = 0 ; i < 13 ; i++ ) {
+            if ( currentPlayer.challRestants[i] ) {
+              Console.WriteLine("|-----|-----------------|-----------------------------------------------------|--------------------------------|");
+              Console.WriteLine(challenges[i].ToString());
+            }
           }
+          Console.WriteLine("----------------------------------------------------------------------------------------------------------------");
+          Console.WriteLine();
+          Console.Write($"(Rappel de vos dés : ");
+          for (int i = 0 ; i < 5 ; i++ ) {
+            Console.Write($"{dices[line,i]}. ");
+          }
+          Console.WriteLine(")\n");
+        } 
+        else if ( choix >= -1 && choix < 13 && currentPlayer.challRestants[choix] ) 
+        {
+          validiteChoix = true;
+          currentPlayer.challRestants[choix] = false;
+          currentPlayer.challTour[numTour] = choix;
+        } 
+        else if ( choix < 0 || choix > 13 )
+        {
+          Console.WriteLine("Vous devez choisir un nombre entre 0 et 13 (inclus).");
         }
-        Console.WriteLine("----------------------------------------------------------------------------------------------------------------");
-        Console.WriteLine();
-        Console.Write($"(Rappel de vos dés : ");
-        for (int i = 0 ; i < 5 ; i++ ) {
-          Console.Write($"{dices[line,i]}. ");
-        }
-        Console.WriteLine(")\n");
-      } 
-      else if ( choix >= -1 && choix < 13 && currentPlayer.challRestants[choix] ) 
-      {
-        validiteChoix = true;
-        currentPlayer.challRestants[choix] = false;
-        currentPlayer.challTour[numTour] = choix;
-      } 
-      else if ( choix < 0 || choix > 13 )
-      {
-        Console.WriteLine("Vous devez choisir un nombre entre 0 et 13 (inclus).");
-      }
-      else
-      {
+        else
+        {
           Console.WriteLine("Ce challenge n'est plus disponible.                  ");
+        }    
+      } catch (Exception ex) {
+        Console.WriteLine("Erreur lors de la saisie des pseudos : " + ex.Message);
+        return;
       }
     }
 
@@ -245,10 +257,15 @@ JOUEUR : {currentPlayer.pseudo}");
 
     relance = false;
 
-    for (int i = 0 ; i <  5 ; i++) {
-      if ( dices[line,i] == 0 ) {
-        dices[line,i] = rnd.Next(1,7);
+    try {
+      for (int i = 0 ; i <  5 ; i++) {
+        if ( dices[line,i] == 0 ) {
+          dices[line,i] = rnd.Next(1,7);
+        }
       }
+    } catch (Exception ex) {
+      Console.WriteLine("Une erreur a eu lieu : " + ex);
+      return;
     }
 
 
@@ -502,32 +519,37 @@ JOUEUR : {currentPlayer.pseudo}");
 
   public static void jason(Player player1, Player player2) {
     // Génération du JSON
-    string json = "{\n" +
-      "  \"parameters\": {\n" +
-      "    \"code\": \"groupe1-001\",\n" +
-      "    \"date\": \"" + DateTime.Now.ToString("yyyy-MM-dd") + "\"\n" +
-      "  },\n" +
-      "  \"players\": [\n" +
-      "    {\n" +
-      "      \"id\": " + player1.id + ",\n" +
-      "      \"pseudo\": \"" + player1.pseudo + "\"\n" +
-      "    },\n" +
-      "    {\n" +
-      "      \"id\": " + player2.id + ",\n" +
-      "      \"pseudo\": \"" + player2.pseudo + "\"\n" +
-      "    }\n" +
-      "  ],\n" +
-      "  \"rounds\": [\n" +
-      Rounds(player1, player2) + "\n" +
-      "  ],\n" +
-      "  \"final_result\": [\n" +
-      FinalResult(player1, player2) + "\n" +
-      "  ]\n" +
-      "}";
+    try {
+      string json = "{\n" +
+        "  \"parameters\": {\n" +
+        "    \"code\": \"groupe1-001\",\n" +
+        "    \"date\": \"" + DateTime.Now.ToString("yyyy-MM-dd") + "\"\n" +
+        "  },\n" +
+        "  \"players\": [\n" +
+        "    {\n" +
+        "      \"id\": " + player1.id + ",\n" +
+        "      \"pseudo\": \"" + player1.pseudo + "\"\n" +
+        "    },\n" +
+        "    {\n" +
+        "      \"id\": " + player2.id + ",\n" +
+        "      \"pseudo\": \"" + player2.pseudo + "\"\n" +
+        "    }\n" +
+        "  ],\n" +
+        "  \"rounds\": [\n" +
+        Rounds(player1, player2) + "\n" +
+        "  ],\n" +
+        "  \"final_result\": [\n" +
+        FinalResult(player1, player2) + "\n" +
+        "  ]\n" +
+        "}";
 
-    // Sauvegarder dans un fichier
-    using (StreamWriter writer = new StreamWriter("res.json")) {
-      writer.WriteLine(json);
+      // Sauvegarder dans un fichier
+      using (StreamWriter writer = new StreamWriter("res.json")) {
+        writer.WriteLine(json);
+      }
+    } catch (Exception ex) {
+      Console.WriteLine("Une erreur à eu lieu lors de la génération du json : " + ex);
+      return;
     }
   }
 
