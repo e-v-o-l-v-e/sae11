@@ -4,8 +4,6 @@ using System.Linq;
 
 public static class Yams {
 
-  
-
   /*-----------------
     INITIALISATION
   -----------------*/
@@ -82,6 +80,14 @@ public static class Yams {
   
   // main saisit les pseudos, lance les fonctions tour, calcule des score et json, puis affiche les score finaux avant de terminer
   static void Main() {
+
+    int h = Console.WindowHeight;
+
+    if (h <= 28) {
+      Console.WriteLine($"La console n'est pas assez haute pour permettre de jouer dans les meilleurs conditions ({h}) : il faut au moins 34 pixels de hauteur.\nMerci d'agrandir votre console ou de dezoomer.");
+      return;
+    }  
+
     Console.Clear();
 
     try {
@@ -159,7 +165,7 @@ public static class Yams {
 
     // on verifie si le challenge est encore jouable
     while ( validiteChoix == false ) {
-      Console.SetCursorPosition(0,34-numTour);
+      clearLine(34-numTour);
       Console.Write("Quel challenge souhaitez-vous jouer ? (entrez 0 pour voir la liste des challenges, -1 pour le score actuel) : ");
 
       if ( !int.TryParse(Console.ReadLine(), out choix) ) 
@@ -511,7 +517,13 @@ JOUEUR : {currentPlayer.pseudo}");
 
   public static void clearLine(int l, int n = 1)
   {
-    Console.SetCursorPosition(0,l);
+    try {
+      Console.SetCursorPosition(0,l);
+    } catch (Exception ex) {
+      Console.WriteLine("La console n'est pas assez haute pour pouvoir afficher correctement le texte, mais si ce message ci s'affiche c'est que la console a étée modifiée entre temps, remettez là comme avant puis appuyer sur entrée");
+      Console.ReadLine();
+      Console.SetCursorPosition(0,l);
+    }
     for (int i = 0 ; i < n ; i++) {
       Console.Write("\r" + new string(' ', Console.WindowWidth) + "\r");
       Console.WriteLine();
