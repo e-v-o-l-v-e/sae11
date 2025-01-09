@@ -2,7 +2,9 @@ using System;
 using System.IO;
 using System.Linq;
 
-public static partial class Yams {
+public static class Yams {
+
+  
 
   /*-----------------
     INITIALISATION
