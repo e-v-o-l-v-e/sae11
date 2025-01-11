@@ -160,7 +160,7 @@ public static class Yams {
     // on verifie si le challenge est encore jouable
     while (validiteChoix == false) {
       clearLine(34 - numTour);
-      Console.Write("Quel challenge souhaitez-vous jouer ? (entrez 0 pour voir la liste des challenges, -1 pour le score actuel) : ");
+      Console.Write("Quel challenge souhaitez-vous jouer ? (entrez 0 pour voir la liste des challenges) : ");
 
       if (!int.TryParse(Console.ReadLine(), out choix)) {
         validiteChoix = false;
