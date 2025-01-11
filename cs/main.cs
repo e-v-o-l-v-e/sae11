@@ -135,25 +135,20 @@ public static class Yams {
   static void tour (int numTour, ref Player currentPlayer) {
     Console.Clear();
 
-    int[,] dices = new int[4,5];
-    int line = 1;
-    bool relance = false;
+    int[] dices = new int[5];
+    int relance = 0;
 
     // on affiche les informations du tour, joueur, scores
     status(numTour, ref currentPlayer);
 
-    // appel fonction principale de tour qui change les 0 en int aleatoire entre 1 et 6 pour la ligne du tour puis demande au joueur quels dés ils souhaitent garder 
-    lancerDes(ref dices, line, ref relance);
-    // on relance les des jusqu'a 2 fois si le joueur decide de relancer certain dés
-    for (int i = 0 ; i < 2 ; i++ ) {
-      if ( relance ) {
-        line++;
-        lancerDes(ref dices, line, ref relance);
-      }
+    // on lance les des jusqu'a 3 fois si le joueur decide de relancer certain dés
+    while (relance < 3 && dices.Contains(0)) {
+      // appel fonction principale de tour qui change les 0 en int aleatoire entre 1 et 6 pour la ligne du tour puis demande au joueur quels dés ils souhaitent garder 
+      lancerDes(ref dices, ref relance);
     }
     // on enregistre les des finaux dans la structure du joueur
     for (int i = 0 ; i < 5 ; i++ ) {
-      currentPlayer.dices[numTour,i] = dices[line,i];
+      currentPlayer.dices[numTour,i] = dices[i];
     }
 
     // on affiche les challenges restants pour que le joueur puisse choisir
@@ -193,7 +188,7 @@ public static class Yams {
           Console.WriteLine();
           Console.Write($"(Rappel de vos dés : ");
           for (int i = 0 ; i < 5 ; i++ ) {
-            Console.Write($"{dices[line,i]}. ");
+            Console.Write($"{dices[i]}. ");
           }
           Console.WriteLine(")\n");
         } 
@@ -261,18 +256,18 @@ JOUEUR : {currentPlayer.pseudo}");
 
 
   // on jette les des qui doivent l'etre
-  public static void lancerDes (ref int[,] dices, int line, ref bool relance) {
+  public static void lancerDes (ref int[] dices, ref int relance) {
 
-    relance = false;
+    /*relance = 1;*/
 
     try {
       for (int i = 0 ; i <  5 ; i++) {
-        if ( dices[line,i] == 0 ) {
-          dices[line,i] = rnd.Next(1,7);
+        if ( dices[i] == 0 ) {
+          dices[i] = rnd.Next(1,7);
         }
       }
     } catch (Exception ex) {
-      Console.WriteLine("Une erreur a eu lieu : " + ex);
+      Console.WriteLine("Une erreur a eu lieu lors du jet de dés: " + ex);
       return;
     }
 
@@ -280,20 +275,20 @@ JOUEUR : {currentPlayer.pseudo}");
     Console.SetCursorPosition(0,12);
     Console.Write($"Voici vos dés : ");
     for (int i = 0 ; i < 5 ; i++ ) {
-      Console.Write($"{dices[line,i]}. ");
+      Console.Write($"{dices[i]}. ");
     }
     Console.WriteLine();
-    afficheDes(dices, line);
+    afficheDes(dices);
 
 
-    if ( line < 3 ) {
+    if ( relance < 2 ) {
       // choix du joueur
-      Console.SetCursorPosition(0,19);
-      Console.WriteLine($"Lancers restants : {3 - line}");
+      clearLine(19);
+      Console.WriteLine($"Lancers restants : {2 - relance}");
       for ( int i = 0 ; i < 5 ; i++ ) {
         clearLine(20);
-        Console.Write($"Souhaitez-vous garder le dé numéro {i+1} qui vaut {dices[line,i]} ? y/n/a/q/?.");
-        afficheUnDes(dices,line,i);
+        Console.Write($"Souhaitez-vous garder le dé numéro {i+1} qui vaut {dices[i]} ? y/n/a/q/?.");
+        afficheUnDes(dices,i);
 
         char input;
         char[] validInput = {'y','n','a','q'};
@@ -306,33 +301,26 @@ JOUEUR : {currentPlayer.pseudo}");
           clearLine(27);
         } while (!validInput.Contains(input));
 
-        if ( input == 'y' )
+        if (input == 'a') 
         {
-          dices[line+1,i] = dices[line,i];
-        }
-        else if (input == 'a') 
-        {
-          while ( i < 5 ) {
-            dices[line+1,i] = dices[line,i];
-            i++;
-          }
+          i = 6;
+
         }
         else if (input == 'n')
         {
-          dices[line,i] = 0;
-          relance = true;
+          dices[i] = 0;
         }
         else if (input == 'q') 
         {
           while ( i < 5 ) {
-            dices[line+1,i] = 0;
+            dices[i] = 0;
             i++;
           }
-          relance = true;
         }
         clearLine(27);
       }
     }
+    relance++;
     Console.WriteLine();
   }
 
@@ -519,7 +507,7 @@ JOUEUR : {currentPlayer.pseudo}");
   {
     try {
       Console.SetCursorPosition(0,l);
-    } catch (Exception ex) {
+    } catch (Exception) {
       Console.WriteLine("La console n'est pas assez haute pour pouvoir afficher correctement le texte, mais si ce message ci s'affiche c'est que la console a étée modifiée entre temps, remettez là comme avant puis appuyer sur entrée");
       Console.ReadLine();
       Console.SetCursorPosition(0,l);
@@ -627,7 +615,7 @@ JOUEUR : {currentPlayer.pseudo}");
 
 
   // les trucs useless mais stylés
-  public static void afficheDes (int[,] dices, int line) {
+  public static void afficheDes (int[] dices) {
 
     for (int i = 0 ; i < 5 ; i++) {
       Console.Write("  -------  ");
@@ -635,7 +623,7 @@ JOUEUR : {currentPlayer.pseudo}");
     Console.WriteLine();
 
     for (int i = 0 ; i < 5 ; i++) {
-      switch (dices[line,i]) {
+      switch (dices[i]) {
         case 1: 
           Console.Write(" |       | ");
           break;
@@ -658,7 +646,7 @@ JOUEUR : {currentPlayer.pseudo}");
     }
     Console.WriteLine();
     for (int i = 0 ; i < 5 ; i++) {
-      switch (dices[line,i]) {
+      switch (dices[i]) {
         case 1: 
           Console.Write(" |   1   | ");
           break;
@@ -681,7 +669,7 @@ JOUEUR : {currentPlayer.pseudo}");
     }
     Console.WriteLine();
     for (int i = 0 ; i < 5 ; i++) {
-      switch (dices[line,i]) {
+      switch (dices[i]) {
         case 1: 
           Console.Write(" |       | ");
           break;
@@ -710,8 +698,8 @@ JOUEUR : {currentPlayer.pseudo}");
     Console.WriteLine();
   }
 
-  public static void afficheUnDes (int[,] dices, int line, int i) {
-    switch (dices[line,i])
+  public static void afficheUnDes (int[] dices, int i) {
+    switch (dices[i])
     {
       case 1:
         Console.WriteLine($"
